@@ -10,9 +10,12 @@ namespace JRPG.Models
         public string Name { get { return "Basic Mob"; } }
         public int Hp { get; private set; }
 
+        public int AttackSpeed {  get; private set; }
+
         public BasicMob()
         {
             Hp = 100;
+            AttackSpeed = 10;
         }
        
         public Damage GetDamage(Player player)

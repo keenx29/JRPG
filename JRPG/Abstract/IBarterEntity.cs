@@ -9,6 +9,7 @@ namespace JRPG.Abstract
     {
         string Name { get; }
         IEnumerable<IItem> Inventory { get; }
-        int GetPrice(IItem item);
+        int GetBuyPrice(IItem item);
+        int GetSalePrice (IItem item);
     }
 }

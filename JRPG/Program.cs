@@ -30,13 +30,13 @@ namespace JRPG
             var player = new Entity();
             player.AddComponent(new SpriteComponent { Sprite = 'u' });
             player.AddComponent(new PlayerComponent(playerModel));
-            player.Position = new Vector3(2, 2, 1);
+            player.Position = new Vector3(5, 5, 1);
 
 
             var tallGrass = new Entity();
             tallGrass.AddComponent(new SpriteComponent { Sprite = '#' });
             tallGrass.AddComponent(new CombatComponent(() => new Combat(playerModel, new BasicMob())));
-            tallGrass.Position = new Vector3(3, 3, 0);
+            tallGrass.Position = new Vector3(6, 1, 0);
             //for (int i = 0; i < ZoneWidth; i++)
             //{
             //    var walls = new Entity();
@@ -56,26 +56,29 @@ namespace JRPG
 
             var ceiling = new Entity();
             ceiling.AddComponent(new SpriteComponent { Sprite = '^' });
-            ceiling.Position = new Vector3(4, 4, 2);
+            ceiling.Position = new Vector3(1, 0, 0);
 
             var wall = new Entity();
             wall.AddComponent(new ConstantEntranceComponent(false));
             wall.AddComponent(new SpriteComponent { Sprite = '*' });
-            wall.Position = new Vector3(5, 5, 0);
+            wall.Position = new Vector3(0, 1, 0);
 
             var npc1 = new Entity();
             npc1.AddComponent(new DialogComponent(new Dialog
-                (new DialogScreen
-                ("Have this item!",
-                e => e.GetComponent<PlayerComponent>().Player.AddItem(new Item("Armor - " + random.Next(0,100), true, false,-5))))));
+                (new DialogScreen(
+                    "Have this item!",
+                    e => e.GetComponent<PlayerComponent>().Player.AddItem(
+                        new Item("Armor", true, false,-5))))));
             npc1.AddComponent(new SpriteComponent { Sprite = '!' });
-            npc1.Position = new Vector3(1, 1, 0);
+            npc1.Position = new Vector3(2, 1, 0);
 
             var npc2 = new Entity();
-            npc2.Position = new Vector3 (6, 6, 0);
+            npc2.Position = new Vector3 (4, 1, 0);
             var trader = new Trader();
-            trader.AddItem(new Item("Armor",true,false,0,20));
-            npc2.AddComponent(new BarterComponent(new Barter(playerModel, trader)));
+            trader.AddItem(new Gear("Armor",true,false,-8));
+            trader.AddItem(new Gear("Armor",true,false,-8,weight:5));
+            trader.AddItem(new Gear("Armor",true,false,-8,weight:5));
+            npc2.AddComponent(new BarterComponent(() => new Barter(playerModel, trader)));
             npc2.AddComponent(new SpriteComponent { Sprite = '?' });
 
             var zone1 = new Zone("Zone 1", new Vector3(ZoneWidth, ZoneHeight, 3));

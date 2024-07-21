@@ -19,12 +19,17 @@ namespace JRPG.Models
         }
         public void UseItem(IItem item)
         {
-            if (!item.CanUse)
+            if (item is IUsableItem)
+            {
+                PerformAction(item.GetDamage(Entity));
+                return;
+            }
+            else
             {
                 _listeners.ForEach(x => x.DisplayMessage("Can't use " + item.Name));
                 return;
             }
-            PerformAction(item.GetDamage(Entity));
+            
         }
         public void UseAbility(IAbility ability)
         {
@@ -33,23 +38,46 @@ namespace JRPG.Models
         private void PerformAction (Damage damage)
         {
             var listenersCopy = new List<ICombatListener>(_listeners);
-            listenersCopy.ForEach(x => x.DisplayMessage(Entity.Name + "took " + damage.Amount + " damage from " + damage.Text));
-            Entity.TakeDamage(damage);
-
-            if (Entity.Hp <= 0)
+            if (Player.AttackSpeed >= Entity.AttackSpeed)
             {
-                listenersCopy.ForEach(x => x.DisplayMessage(Entity.Name + " died."));
-                listenersCopy.ForEach(x => x.EndCombat());
-                return;
-            }
+                listenersCopy.ForEach(x => x.DisplayMessage(Entity.Name + " took " + damage.Amount + " damage from " + damage.Text));
+                Entity.TakeDamage(damage);
 
-            damage = Entity.GetDamage(Player);
-            listenersCopy.ForEach(x => x.DisplayMessage("Player took " + damage.Amount + " damage from " + damage.Text));
-            Player.TakeDamage(damage);
-            if (Player.Hp <= 0)
-            {
-                listenersCopy.ForEach(x => x.PlayerDied());
+                if (Entity.Hp <= 0)
+                {
+                    listenersCopy.ForEach(x => x.DisplayMessage(Entity.Name + " died."));
+                    listenersCopy.ForEach(x => x.EndCombat());
+                    return;
+                }
+
+                damage = Entity.GetDamage(Player);
+                listenersCopy.ForEach(x => x.DisplayMessage("Player took " + damage.Amount + " damage from " + damage.Text));
+                Player.TakeDamage(damage);
+                if (Player.Hp <= 0)
+                {
+                    listenersCopy.ForEach(x => x.PlayerDied());
+                }
             }
+            else
+            {
+                var enemyDamage = Entity.GetDamage(Player);
+                listenersCopy.ForEach(x => x.DisplayMessage("Player took " + enemyDamage.Amount + " damage from " + enemyDamage.Text));
+                Player.TakeDamage(enemyDamage);
+                if (Player.Hp <= 0)
+                {
+                    listenersCopy.ForEach(x => x.PlayerDied());
+                }
+                listenersCopy.ForEach(x => x.DisplayMessage(Entity.Name + " took " + damage.Amount + " damage from " + damage.Text));
+                Entity.TakeDamage(damage);
+
+                if (Entity.Hp <= 0)
+                {
+                    listenersCopy.ForEach(x => x.DisplayMessage(Entity.Name + " died."));
+                    listenersCopy.ForEach(x => x.EndCombat());
+                    return;
+                }
+            }
+            
         }
         public void AddListener(ICombatListener listener)
         {

@@ -23,12 +23,12 @@ namespace JRPG.States
 
         public void Deactivate()
         {
-            throw new NotImplementedException();
+
         }
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+
         }
 
         public void ProcessInput(ConsoleKeyInfo key)
@@ -66,7 +66,17 @@ namespace JRPG.States
                     var itemToEquip = _player.Inventory.ElementAt(_selectedItem - equippedCount);
                     if (itemToEquip.CanEquip)
                     {
-                        _player.EquipItem(itemToEquip);
+                        if (!_player.EquipItem(itemToEquip))
+                        {
+                            Render($"{itemToEquip.Name} is already equipped!");
+                            return;
+                        }
+
+                    }
+                    else
+                    {
+                        Render($"{itemToEquip.Name} is unequippable!");
+                        return;
                     }
                 }
             }
@@ -74,17 +84,37 @@ namespace JRPG.States
         }
         private void Render()
         {
+            Render(null);
+        }
+        private void Render(string message)
+        {
             Console.Clear();
             Console.WriteLine("Player Inventory");
             Console.WriteLine("-------------------------------------");
             var itemIndex = 0;
+            var damageModifier = 0;
             foreach (var item in _player.EquippedItems)
             {
+                damageModifier = item.GetDamageModifier();
                 if (itemIndex == _selectedItem)
                 {
                     ColorConsole(true);
                 }
-                Console.WriteLine("[*] {0}", item.Name);
+
+
+                if (damageModifier < 0)
+                {
+                    Console.WriteLine($"[*] {item.Name} - {(damageModifier * -1)} Defense");
+                }
+                else if (damageModifier > 0)
+                {
+                    Console.WriteLine($"[*] {item.Name} - {damageModifier} Damage");
+                }
+                else
+                {
+                    Console.WriteLine($"[*] {item.Name}");
+                }
+
                 ColorConsole(false);
 
                 itemIndex++;
@@ -92,16 +122,32 @@ namespace JRPG.States
             Console.WriteLine("-------------------------------------");
             foreach (var item in _player.Inventory)
             {
+                damageModifier = item.GetDamageModifier();
                 if (itemIndex == _selectedItem)
                 {
                     ColorConsole(true);
                 }
-                Console.WriteLine("[ ] {0}", item.Name);
+                if (damageModifier < 0)
+                {
+                    Console.WriteLine($"[ ] {item.Name} - {(damageModifier * -1)} Defense");
+                }
+                else if (damageModifier > 0)
+                {
+                    Console.WriteLine($"[ ] {item.Name} - {damageModifier} Damage");
+                }
+                else
+                {
+                    Console.WriteLine($"[ ] {item.Name}");
+                }
                 ColorConsole(false);
 
                 itemIndex++;
             }
             Console.WriteLine("-------------------------------------");
+            if (message != null)
+            {
+                Console.WriteLine(message);
+            }
         }
         private void ColorConsole(bool selected)
         {

@@ -23,14 +23,22 @@ namespace JRPG.Models
 
             foreach (var item in items)
             {
-                _prices.Add(item, random.Next(10, 50));
+                _prices.TryAdd(item, random.Next(10, 50));
             }
 
         }
-        public int GetPrice(IItem item)
+        public int GetBuyPrice(IItem item)
         {
             _prices.TryGetValue(item, out var price);
             return price;
+        }
+        public int GetSalePrice(IItem item)
+        {
+            _prices.TryGetValue(item, out var price);
+            var finalPrice = Math.Floor(price * 0.8);
+            finalPrice = Math.Round(finalPrice);
+            
+            return (int)finalPrice;
         }
         public void AddItem(IItem item)
         {

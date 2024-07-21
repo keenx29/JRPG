@@ -8,6 +8,7 @@ namespace JRPG.Models.Components
 {
     public class CombatComponent : Component, IEntityEntranceComponent
     {
+        // Func of Combat to implement a probability of going into combat
         private readonly Func<Combat> _combatFactory;
         public CombatComponent(Func<Combat> combatFactory)
         {

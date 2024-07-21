@@ -55,6 +55,7 @@ namespace JRPG.States
                 index++;
                 ColorConsole(false);
             }
+            Console.WriteLine("--------------------------------------");
         }
 
         public void Deactivate()

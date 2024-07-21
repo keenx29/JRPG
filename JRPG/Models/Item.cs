@@ -32,5 +32,9 @@ namespace JRPG.Models
         {
             return damage.ModifyAmount(_damageModifier);
         }
+        public int GetDamageModifier()
+        {
+            return _damageModifier;
+        }
     }
 }

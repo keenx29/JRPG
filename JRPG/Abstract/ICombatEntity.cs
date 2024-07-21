@@ -9,6 +9,7 @@ namespace JRPG.Abstract
     {
         string Name { get; }
         int Hp { get; }
+        int AttackSpeed { get; }
         Damage GetDamage(Player player);
         void TakeDamage(Damage damage);
     }

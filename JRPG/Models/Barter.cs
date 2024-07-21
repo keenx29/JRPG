@@ -16,8 +16,6 @@ namespace JRPG.Models
         {
             Player = player;
             Entity = entity;
-            var itemList = Player.Inventory.Concat(entity.Inventory).ToList();
-            Entity.GeneratePrices(itemList);
         }
         public void AddListener(IBarterListener listener)
         {
@@ -29,19 +27,19 @@ namespace JRPG.Models
         }
         public void BuyItem(IItem item)
         {
-            var price = Entity.GetPrice(item);
+            var price = Entity.GetBuyPrice(item);
             if (Entity.Inventory.Contains(item) && price <= Player.Gold)
             {
-                Player.GiveGold(price);
+                Player.SpendGold(price);
                 Entity.RemoveItem(item);
                 Player.AddItem(item);
             }
         }
         public void SellItem(IItem item)
         {
-            var price = Entity.GetPrice(item);
+            var price = (double)Entity.GetSalePrice(item);
             Entity.AddItem(item);
-            Player.ReceiveGold(price);
+            Player.ReceiveGold((int)price);
             Player.RemoveItem(item);
         }
     }

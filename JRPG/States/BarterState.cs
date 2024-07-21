@@ -35,7 +35,7 @@ namespace JRPG.States
                 {
                     ColorConsole(true);
                 }
-                Console.WriteLine($"{item.Name} - {_barter.Entity.GetPrice(item)}g");
+                Console.WriteLine($"{item.Name} - {_barter.Entity.GetBuyPrice(item)}g");
                 index++;
                 ColorConsole(false);
             }
@@ -47,7 +47,7 @@ namespace JRPG.States
                 {
                     ColorConsole(true);
                 }
-                Console.WriteLine($"{item.Name} - {_barter.Entity.GetPrice(item)}g");
+                Console.WriteLine($"{item.Name} - {_barter.Entity.GetSalePrice(item)}g");
                 index++;
                 ColorConsole(false);
             }
@@ -69,6 +69,8 @@ namespace JRPG.States
         }
         public void Activate()
         {
+            var itemList = _barter.Player.Inventory.Concat(_barter.Entity.Inventory).ToList();
+            _barter.Entity.GeneratePrices(itemList);
             Render();
         }
 
@@ -79,11 +81,16 @@ namespace JRPG.States
 
         public void Dispose()
         {
-            _barter.RemoveListener(this);
+
         }
 
         public void ProcessInput(ConsoleKeyInfo key)
         {
+            if (key.Key == ConsoleKey.Escape)
+            {
+                Program.Engine.PopState(this);
+                return;
+            }
             var traderItemCount = _barter.Entity.Inventory.Count();
             var playerItemCount = _barter.Player.Inventory.Count();
             var totalCount = traderItemCount + playerItemCount;

@@ -1,12 +1,14 @@
 ﻿using JRPG.Abstract;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace JRPG.Models
 {
     public class Player
     {
+        //TODO: Armor slot system
         private readonly List<IItem> _equippedItems;
         private readonly List<IItem> _inventory;
         private readonly List<IAbility> _abilities;
@@ -16,6 +18,7 @@ namespace JRPG.Models
         public IEnumerable<IAbility> Abilities { get { return _abilities; } }
         public int Hp { get; private set; }
         public int Gold { get; private set; }
+        public int AttackSpeed { get; private set; }
         public Player() 
         {
             _equippedItems = new List<IItem>();
@@ -23,6 +26,7 @@ namespace JRPG.Models
             _abilities = new List<IAbility>();
             Hp = 200;
             Gold = 100;
+            AttackSpeed = 10;
         }
         public void AddAbility(IAbility ability)
         {
@@ -36,15 +40,22 @@ namespace JRPG.Models
         {
             _inventory.Remove(item);
         }
-        public void EquipItem (IItem item)
+        public bool EquipItem (IItem item)
         {
-            _inventory.Remove(item);
-            _equippedItems.Add(item);
+            if (!_equippedItems.Any(x => string.Equals(x.Name,item.Name,StringComparison.CurrentCultureIgnoreCase)))
+            {
+                _inventory.Remove(item);
+                _equippedItems.Add(item);
+                UpdateStats();
+                return true;
+            }
+            return false;
         }
         public void UnEquipItem (IItem item)
         {
             _equippedItems.Remove(item);
             _inventory.Add(item);
+            UpdateStats();
         }
 
         public void TakeDamage(Damage damage)
@@ -56,13 +67,23 @@ namespace JRPG.Models
             Hp -= damage.Amount;
             // damage = _equippedItems.Aggregate(damage, (a, i) => i.ModifyDamage(a));
         }
-        public void GiveGold(int input)
+        public void SpendGold(int input)
         {
             Gold -= input;
         }
         public void ReceiveGold(int input)
         {
             Gold += input;
+        }
+        public void UpdateStats()
+        {
+            foreach(IEquippableItem item in EquippedItems)
+            {
+                if (item.Weight > 0)
+                {
+                    AttackSpeed -= item.Weight;
+                }
+            }
         }
     }
 }

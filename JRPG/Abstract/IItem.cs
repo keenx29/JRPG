@@ -12,5 +12,6 @@ namespace JRPG.Abstract
 
         Damage GetDamage(ICombatEntity entity);
         Damage ModifyDamage (Damage damage);
+        int GetDamageModifier();
     }
 }

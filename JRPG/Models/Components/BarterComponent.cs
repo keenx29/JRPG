@@ -8,10 +8,10 @@ namespace JRPG.Models.Components
 {
     class BarterComponent : Component, IEntityEntranceComponent
     {
-        private Barter Barter { get; set; }
-        public BarterComponent(Barter barter)
+        private readonly Func<Barter> _barter;
+        public BarterComponent(Func<Barter> barter)
         {
-            Barter = barter;
+            _barter = barter;
         }
         public bool CanEnter(Entity entity)
         {
@@ -20,7 +20,7 @@ namespace JRPG.Models.Components
 
         public void Enter(Entity entity)
         {
-            Program.Engine.PushState(new BarterState(Barter));
+            Program.Engine.PushState(new BarterState(_barter()));
         }
     }
 }
