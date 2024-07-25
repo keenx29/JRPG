@@ -11,11 +11,13 @@ namespace JRPG.Models
         public int Hp { get; private set; }
 
         public int AttackSpeed {  get; private set; }
+        public int Defense {  get; private set; }
 
         public BasicMob()
         {
             Hp = 100;
             AttackSpeed = 10;
+            Defense = 10;
         }
        
         public Damage GetDamage(Player player)

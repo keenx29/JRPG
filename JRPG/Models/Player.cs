@@ -19,14 +19,15 @@ namespace JRPG.Models
         public int Hp { get; private set; }
         public int Gold { get; private set; }
         public int AttackSpeed { get; private set; }
-        public int Armor { get; private set; }
+        public int Defense { get; private set; }
+        public int DamageBuff { get; private set; } 
         public Player() 
         {
             _equippedItems = new List<IEquippableItem>();
             _inventory = new List<IItem>();
             _abilities = new List<IAbility>();
             Hp = 200;
-            Gold = 100;
+            Gold = 1000;
             AttackSpeed = 10;
         }
         public void AddAbility(IAbility ability)
@@ -61,10 +62,6 @@ namespace JRPG.Models
 
         public void TakeDamage(Damage damage)
         {
-            foreach (var item in EquippedItems)
-            {
-                item.ModifyDamage(damage);
-            }
             Hp -= damage.Amount;
             // damage = _equippedItems.Aggregate(damage, (a, i) => i.ModifyDamage(a));
         }
@@ -84,11 +81,23 @@ namespace JRPG.Models
                 {
                     AttackSpeed -= item.Weight;
                 }
+                if (item.Defense > 0)
+                {
+                    Defense += item.Defense;
+                }
             }
         }
         public void Heal(int amount)
         {
             Hp += amount;
+        }
+        public void Buff(int amount)
+        {
+            DamageBuff += amount;
+        }
+        public void ResetBuff()
+        {
+            DamageBuff = 0;
         }
     }
 }

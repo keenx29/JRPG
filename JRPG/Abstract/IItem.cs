@@ -8,8 +8,5 @@ namespace JRPG.Abstract
     {
         string Name { get; }
         //TODO: The calculation for GetDamage for IUsableItem(s) has been moved to the Consumable class. ModifyDamage calculation should be moved to the IEquippableItem interface and Gear class
-        Damage GetDamage(ICombatEntity entity);
-        Damage ModifyDamage (Damage damage);
-        int GetDamageModifier();
     }
 }

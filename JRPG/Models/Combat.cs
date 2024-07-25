@@ -3,6 +3,7 @@ using JRPG.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace JRPG.Models
 {
@@ -19,32 +20,51 @@ namespace JRPG.Models
         }
         public void UseItem(IUsableItem item)
         {
-            if (item is IUsableItem && item.Charges > 0)
+            if (item.Charges > 0)
             {
                 var effect = item.GetEffect();
-                if (effect == "attack")
+                var modifier = item.GetAmount();
+                switch (effect)
                 {
-                    var damage = item.GetDamage(Entity);
-                    PerformAction(damage);
-                    item.UseCharge();
+                    case "Damage":
+                        var damage = item.GetDamage();
+                        PerformAction(damage);
+                        break;
+                    case "Protect":
+                        
+                        break;
+                    case "Heal":
+                        HealPlayer(item);
+                        break;
+                    case "Damage Bonus":
+                        BuffPlayer(item);
+                        break;
+                    default:
+                        break;
                 }
-                else if (effect == "protect")
-                {
-                    //TODO: Add armor to the player to reduce the damage
-                    //TODO: Make the armor last for a specific turn number
-                    item.UseCharge();
-                }
-                else if (effect == "heal")
-                {
-                    var healingAmount = item.GetAmount(effect);
-                    Player.Heal(healingAmount);
-                    Player.TakeDamage(Entity.GetDamage(Player));
-                    //TODO: When the player heals he should lose his turn and take damage from the mob
-                    /*TODO: Make the necessary checks for taking damage i.e. check health of the player, check if player died after the damage, display message,
-                    Best way to implent it is probably by separating the PerformAction method into 2 for Player taking damage and Entity taking damage*/
-                    item.UseCharge();
-                    
-                }
+                //if (effect == "attack")
+                //{
+                //    var damage = item.GetDamage(Player,Entity);
+                //    var updatedDamage = new Damage(damage.Text, damage.Amount + Player.DamageBuff);
+                //    PerformAction(updatedDamage);
+                //}
+                //else if (effect == "protect")
+                //{
+                //    //TODO: Add armor to the player to reduce the damage
+                //    //TODO: Make the armor last for a specific turn number
+                //}
+                //else if (effect == "heal")
+                //{
+                //    HealPlayer(item);
+                //    //TODO: When the player heals he should lose his turn and take damage from the mob
+                //    /*TODO: Make the necessary checks for taking damage i.e. check health of the player, check if player died after the damage, display message,
+                //    Best way to implent it is probably by separating the PerformAction method into 2 for Player taking damage and Entity taking damage*/
+                //}
+                //else if (effect == "buff")
+                //{
+                //    BuffPlayer(item);
+                //}
+                item.UseCharge();
                 if (item.Charges == 0)
                 {
                     Player.RemoveItem(item);
@@ -60,7 +80,50 @@ namespace JRPG.Models
         }
         public void UseAbility(IAbility ability)
         {
-            PerformAction(ability.GetDamage(Entity));
+            var rawAbilityDamage = ability.GetDamage();
+            var calculatedAbilityDamage = new Damage
+                (rawAbilityDamage.Text,
+                rawAbilityDamage.Amount + Player.DamageBuff - (Entity.Defense / 2));
+            PerformAction(calculatedAbilityDamage);
+        }
+        private void HealPlayer(IUsableItem item)
+        {
+            var healingAmount = item.GetAmount();
+            var listenersCopy = new List<ICombatListener>(_listeners);
+            Player.Heal(healingAmount);
+            var enemyDamage = Entity.GetDamage(Player);
+            listenersCopy.ForEach(x => x.DisplayMessage("Player healed for " + healingAmount + "hp from " + item.Name));
+            listenersCopy.ForEach(x => x.DisplayMessage("Player took " + enemyDamage.Amount + " damage from " + enemyDamage.Text));
+            Player.TakeDamage(enemyDamage);
+            if (Player.Hp <= 0)
+            {
+                listenersCopy.ForEach(x => x.PlayerDied());
+            }
+        }
+        private void BuffPlayer(IUsableItem item)
+        {
+            var buffAmount = item.GetAmount();
+            var listenersCopy = new List<ICombatListener>(_listeners);
+            Player.Buff(buffAmount);
+            var enemyDamage = Entity.GetDamage(Player);
+            listenersCopy.ForEach(x => x.DisplayMessage("Player buffed for " + buffAmount + "damage from " + item.Name));
+            listenersCopy.ForEach(x => x.DisplayMessage("Player took " + enemyDamage.Amount + " damage from " + enemyDamage.Text));
+            Player.TakeDamage(enemyDamage);
+            if (Player.Hp <= 0)
+            {
+                listenersCopy.ForEach(x => x.PlayerDied());
+            }
+        }
+        private void PerformActionOnPlayer(Damage damage)
+        {
+            var listenersCopy = new List<ICombatListener>(_listeners);
+            damage = Entity.GetDamage(Player);
+            listenersCopy.ForEach(x => x.DisplayMessage("Player took " + damage.Amount + " damage from " + damage.Text));
+            Player.TakeDamage(damage);
+            if (Player.Hp <= 0)
+            {
+                listenersCopy.ForEach(x => x.PlayerDied());
+            }
         }
         private void PerformAction (Damage damage)
         {
@@ -77,9 +140,10 @@ namespace JRPG.Models
                     return;
                 }
 
-                damage = Entity.GetDamage(Player);
-                listenersCopy.ForEach(x => x.DisplayMessage("Player took " + damage.Amount + " damage from " + damage.Text));
-                Player.TakeDamage(damage);
+                var rawEnemyDamage = Entity.GetDamage(Player);
+                var calculatedEnemyDamage = new Damage(rawEnemyDamage.Text, rawEnemyDamage.Amount - Player.Defense);
+                listenersCopy.ForEach(x => x.DisplayMessage("Player took " + calculatedEnemyDamage.Amount + " damage from " + calculatedEnemyDamage.Text));
+                Player.TakeDamage(calculatedEnemyDamage);
                 if (Player.Hp <= 0)
                 {
                     listenersCopy.ForEach(x => x.PlayerDied());
@@ -105,6 +169,12 @@ namespace JRPG.Models
                 }
             }
             
+        }
+        public bool Run()
+        {
+            var listenersCopy = new List<ICombatListener>(_listeners);
+            listenersCopy.ForEach(x => x.EndCombat());
+            return true;
         }
         public void AddListener(ICombatListener listener)
         {

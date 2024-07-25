@@ -15,9 +15,13 @@ namespace JRPG.Models
             Name = name;
             _damage = damage;
         }
-        public Damage GetDamage(ICombatEntity entity)
+        public Damage GetDamage()
         {
             return new Damage(Name, _damage);
+        }
+        public Damage CalculateDamage(ICombatEntity entity)
+        {
+            return new Damage(Name, _damage - (entity.Defense / 2));
         }
     }
 }

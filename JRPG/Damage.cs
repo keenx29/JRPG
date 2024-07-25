@@ -17,7 +17,7 @@ namespace JRPG
 
         public Damage ModifyAmount(int delta) 
         { 
-            return new Damage(Text, Amount + delta);
+            return new Damage(Text, Amount - delta);
         }
         
     }

@@ -100,13 +100,11 @@ namespace JRPG.States
                 {
                     ColorConsole(true);
                 }
-
-
-                if (damageModifier < 0)
+                if (item is Gear)
                 {
-                    Console.WriteLine($"[*] {item.Name} - {(damageModifier * -1)} Defense");
+                    Console.WriteLine($"[*] {item.Name} - {(damageModifier)} Defense");
                 }
-                else if (damageModifier > 0)
+                else if (item is Weapon)
                 {
                     Console.WriteLine($"[*] {item.Name} - {damageModifier} Damage");
                 }
@@ -122,22 +120,29 @@ namespace JRPG.States
             Console.WriteLine("-------------------------------------");
             foreach (var item in _player.Inventory)
             {
-                damageModifier = item.GetDamageModifier();
                 if (itemIndex == _selectedItem)
                 {
                     ColorConsole(true);
                 }
-                if (damageModifier < 0)
+                var equippableItem = item as IEquippableItem;
+                var usableItem = item as IUsableItem;
+                if (equippableItem != null)
                 {
-                    Console.WriteLine($"[ ] {item.Name} - {(damageModifier * -1)} Defense");
+                    damageModifier = equippableItem.GetDamageModifier();
+                    if (equippableItem is Gear)
+                    {
+                        Console.WriteLine($"[ ]{equippableItem.Name} - {equippableItem.Defense} Defense");
+                    }
+                    else if (equippableItem is Weapon)
+                    {
+                        Console.WriteLine($"[ ]{equippableItem.Name} - {equippableItem.Defense} Damage");
+                    }
                 }
-                else if (damageModifier > 0)
+                else if (usableItem != null)
                 {
-                    Console.WriteLine($"[ ] {item.Name} - {damageModifier} Damage");
-                }
-                else
-                {
-                    Console.WriteLine($"[ ] {item.Name}");
+                    var effect = usableItem.GetEffect();
+                    damageModifier = usableItem.GetAmount();
+                    Console.WriteLine($"{usableItem.Name} - {damageModifier} {effect}");
                 }
                 ColorConsole(false);
 

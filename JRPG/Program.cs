@@ -25,8 +25,8 @@ namespace JRPG
             var playerModel = new Player();
             playerModel.AddAbility(new Ability("Fireball", 10));
             playerModel.AddAbility(new Ability("Firestorm", 100));
-            playerModel.AddItem(new Consumable("Molotov",3, totalDamage: 25));
-            playerModel.AddItem(new Consumable("Bow",10, totalDamage: 10));
+            playerModel.AddItem(new Consumable("Molotov",3, damage: 25));
+            playerModel.AddItem(new Consumable("Bow",10, damage: 10));
 
             var player = new Entity();
             player.AddComponent(new SpriteComponent { Sprite = 'u' });
@@ -76,12 +76,12 @@ namespace JRPG
             var npc2 = new Entity();
             npc2.Position = new Vector3 (4, 1, 0);
             var trader = new Trader();
-            trader.AddItem(new Gear("Armor",-8));
-            trader.AddItem(new Gear("Armor",-8,weight:5));
-            trader.AddItem(new Gear("Armor",-8,weight:5));
+            trader.AddItem(new Gear("Armor",8));
+            trader.AddItem(new Gear("Armor",5,weight:5));
+            trader.AddItem(new Gear("Armor",10,weight:5));
             trader.AddItem(new Consumable("Potion of Healing",3,health: 25));
             trader.AddItem(new Consumable("Potion of Protection", 1, armor: 10));
-            trader.AddItem(new Consumable("Potion of Rage", 5,damage: 50));
+            trader.AddItem(new Consumable("Potion of Rage", 5,damageBuff: 50));
             npc2.AddComponent(new BarterComponent(() => new Barter(playerModel, trader)));
             npc2.AddComponent(new SpriteComponent { Sprite = '?' });
 
@@ -89,7 +89,7 @@ namespace JRPG
             zone1.AddEntity(player);
             zone1.AddEntity(tallGrass);
             zone1.AddEntity(ceiling);
-            zone1.AddEntity (wall);
+            zone1.AddEntity(wall);
             zone1.AddEntity(npc1);
             zone1.AddEntity(npc2);
             

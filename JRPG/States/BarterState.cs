@@ -31,11 +31,44 @@ namespace JRPG.States
 
             foreach (var item in _barter.Entity.Inventory)
             {
+                var equippableItem = item as IEquippableItem;
+                var usableItem = item as IUsableItem;
                 if (_selectedOption == index)
                 {
                     ColorConsole(true);
                 }
-                Console.WriteLine($"{item.Name} - {_barter.Entity.GetBuyPrice(item)}g");
+                if (equippableItem != null)
+                {
+                    Console.WriteLine($"{equippableItem.Name} - {equippableItem.Defense} Defense - {_barter.Entity.GetBuyPrice(equippableItem)}g");
+                }
+                else if (usableItem != null)
+                {
+                    var effect = usableItem.GetEffect();
+                    var modifier = usableItem.GetAmount();
+                    switch (effect)
+                    {
+                        case "attack":
+                            Console.WriteLine($"{usableItem.Name}[{usableItem.Charges}] - {modifier} Damage - {_barter.Entity.GetBuyPrice(usableItem)}g");
+                            break;
+                        case "protect":
+                            Console.WriteLine($"{usableItem.Name}[{usableItem.Charges}] - {modifier} Defense - {_barter.Entity.GetBuyPrice(usableItem)}g");
+                            break;
+                        case "heal":
+                            Console.WriteLine($"{usableItem.Name}[{usableItem.Charges}] - {modifier} Health - {_barter.Entity.GetBuyPrice(usableItem)}g");
+                            break;
+                        case "buff":
+                            Console.WriteLine($"{usableItem.Name}[{usableItem.Charges}] - {modifier} Damage Bonus - {_barter.Entity.GetBuyPrice(usableItem)}g");
+                            break;
+                        default:
+                            Console.WriteLine($"{usableItem.Name} - {_barter.Entity.GetBuyPrice(usableItem)}g");
+                            break;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"{item.Name} - {_barter.Entity.GetBuyPrice(item)}g");
+                }
+                
                 index++;
                 ColorConsole(false);
             }
@@ -43,9 +76,45 @@ namespace JRPG.States
             Console.WriteLine("Inventory:");
             foreach (var item in _barter.Player.Inventory)
             {
+                var equippableItem = item as IEquippableItem;
+                var usableItem = item as IUsableItem;
                 if (_selectedOption == index)
                 {
                     ColorConsole(true);
+                }
+                if (equippableItem != null)
+                {
+                    if (equippableItem is Gear)
+                    {
+                        Console.WriteLine($"{equippableItem.Name} - {equippableItem.Defense} Defense - {_barter.Entity.GetSalePrice(equippableItem)}g");
+                    }
+                    else if (equippableItem is Weapon)
+                    {
+                        Console.WriteLine($"{equippableItem.Name} - {equippableItem.Defense} Damage - {_barter.Entity.GetSalePrice(equippableItem)}g");
+                    }
+                }
+                else if (usableItem != null)
+                {
+                    var effect = usableItem.GetEffect();
+                    var modifier = usableItem.GetAmount();
+                    switch (effect)
+                    {
+                        case "attack":
+                            Console.WriteLine($"{usableItem.Name}[{usableItem.Charges}] - {modifier} Damage - {_barter.Entity.GetBuyPrice(usableItem)}g");
+                            break;
+                        case "protect":
+                            Console.WriteLine($"{usableItem.Name}[{usableItem.Charges}] - {modifier} Defense - {_barter.Entity.GetBuyPrice(usableItem)}g");
+                            break;
+                        case "heal":
+                            Console.WriteLine($"{usableItem.Name}[{usableItem.Charges}] - {modifier} Health - {_barter.Entity.GetBuyPrice(usableItem)}g");
+                            break;
+                        case "buff":
+                            Console.WriteLine($"{usableItem.Name}[{usableItem.Charges}] - {modifier} Damage Bonus - {_barter.Entity.GetBuyPrice(usableItem)}g");
+                            break;
+                        default:
+                            Console.WriteLine($"{usableItem.Name} - {_barter.Entity.GetBuyPrice(usableItem)}g");
+                            break;
+                    }
                 }
                 Console.WriteLine($"{item.Name} - {_barter.Entity.GetSalePrice(item)}g");
                 index++;

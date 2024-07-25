@@ -7,6 +7,7 @@ namespace JRPG.Abstract
     public interface IAbility
     {
         string Name { get; }
-        Damage GetDamage(ICombatEntity entity);
+        Damage CalculateDamage(ICombatEntity entity);
+        Damage GetDamage();
     }
 }
