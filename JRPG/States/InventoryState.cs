@@ -64,9 +64,9 @@ namespace JRPG.States
                 }else
                 {
                     var itemToEquip = _player.Inventory.ElementAt(_selectedItem - equippedCount);
-                    if (itemToEquip.CanEquip)
+                    if (itemToEquip is IEquippableItem)
                     {
-                        if (!_player.EquipItem(itemToEquip))
+                        if (!_player.EquipItem(itemToEquip as IEquippableItem))
                         {
                             Render($"{itemToEquip.Name} is already equipped!");
                             return;

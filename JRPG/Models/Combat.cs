@@ -17,11 +17,20 @@ namespace JRPG.Models
             Player = player;
             Entity = entity;
         }
-        public void UseItem(IItem item)
+        public void UseItem(IUsableItem item)
         {
             if (item is IUsableItem)
             {
-                PerformAction(item.GetDamage(Entity));
+                if (item.Charges > 0)
+                {
+                    PerformAction(item.GetDamage(Entity));
+                    item.UseCharge();
+                    if (item.Charges == 0)
+                    {
+                        Player.RemoveItem(item);
+                    }
+                }
+                
                 return;
             }
             else

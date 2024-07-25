@@ -9,11 +9,11 @@ namespace JRPG.Models
     public class Player
     {
         //TODO: Armor slot system
-        private readonly List<IItem> _equippedItems;
+        private readonly List<IEquippableItem> _equippedItems;
         private readonly List<IItem> _inventory;
         private readonly List<IAbility> _abilities;
 
-        public IEnumerable<IItem> EquippedItems { get { return _equippedItems; } }
+        public IEnumerable<IEquippableItem> EquippedItems { get { return _equippedItems; } }
         public IEnumerable<IItem> Inventory { get { return _inventory; } }
         public IEnumerable<IAbility> Abilities { get { return _abilities; } }
         public int Hp { get; private set; }
@@ -21,7 +21,7 @@ namespace JRPG.Models
         public int AttackSpeed { get; private set; }
         public Player() 
         {
-            _equippedItems = new List<IItem>();
+            _equippedItems = new List<IEquippableItem>();
             _inventory = new List<IItem>();
             _abilities = new List<IAbility>();
             Hp = 200;
@@ -40,7 +40,7 @@ namespace JRPG.Models
         {
             _inventory.Remove(item);
         }
-        public bool EquipItem (IItem item)
+        public bool EquipItem (IEquippableItem item)
         {
             if (!_equippedItems.Any(x => string.Equals(x.Name,item.Name,StringComparison.CurrentCultureIgnoreCase)))
             {
@@ -51,7 +51,7 @@ namespace JRPG.Models
             }
             return false;
         }
-        public void UnEquipItem (IItem item)
+        public void UnEquipItem (IEquippableItem item)
         {
             _equippedItems.Remove(item);
             _inventory.Add(item);

@@ -6,6 +6,7 @@ namespace JRPG.Abstract
 {
     public interface IUsableItem : IItem
     {
-
+        int Charges { get; }
+        void UseCharge();
     }
 }

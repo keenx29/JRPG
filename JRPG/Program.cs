@@ -15,6 +15,7 @@ namespace JRPG
             var random = new Random();
             const int ZoneWidth = 50;
             const int ZoneHeight = 30;
+            const int ZoneDepth = 3;
 
             Console.BufferWidth = Console.WindowWidth = ZoneWidth;
             Console.BufferHeight = Console.WindowHeight = ZoneHeight;
@@ -24,8 +25,8 @@ namespace JRPG
             var playerModel = new Player();
             playerModel.AddAbility(new Ability("Fireball", 10));
             playerModel.AddAbility(new Ability("Firestorm", 100));
-            playerModel.AddItem(new Item("Molotov", false, true, totalDamage: 25));
-            playerModel.AddItem(new Item("Bow", false, true, totalDamage: 10));
+            playerModel.AddItem(new Consumable("Molotov",3, totalDamage: 25));
+            playerModel.AddItem(new Consumable("Bow",10, totalDamage: 10));
 
             var player = new Entity();
             player.AddComponent(new SpriteComponent { Sprite = 'u' });
@@ -75,13 +76,13 @@ namespace JRPG
             var npc2 = new Entity();
             npc2.Position = new Vector3 (4, 1, 0);
             var trader = new Trader();
-            trader.AddItem(new Gear("Armor",true,false,-8));
-            trader.AddItem(new Gear("Armor",true,false,-8,weight:5));
-            trader.AddItem(new Gear("Armor",true,false,-8,weight:5));
+            trader.AddItem(new Gear("Armor",-8));
+            trader.AddItem(new Gear("Armor",-8,weight:5));
+            trader.AddItem(new Gear("Armor",-8,weight:5));
             npc2.AddComponent(new BarterComponent(() => new Barter(playerModel, trader)));
             npc2.AddComponent(new SpriteComponent { Sprite = '?' });
 
-            var zone1 = new Zone("Zone 1", new Vector3(ZoneWidth, ZoneHeight, 3));
+            var zone1 = new Zone("Zone 1", new Vector3(ZoneWidth, ZoneHeight, ZoneDepth));
             zone1.AddEntity(player);
             zone1.AddEntity(tallGrass);
             zone1.AddEntity(ceiling);

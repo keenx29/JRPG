@@ -35,23 +35,25 @@ namespace JRPG.States
 
             foreach (var ability in _combat.Player.Abilities)
             {
+                var abilityDamage = ability.GetDamage(_combat.Entity).Amount;
                 if (_selectedOption == index)
                 {
                     ColorConsole(true);
                 }
-                Console.WriteLine(ability.Name);
+                Console.WriteLine($"{ability.Name} - {abilityDamage} Damage");
                 index++;
                 ColorConsole(false);
             }
             Console.WriteLine("--------------------------------------");
             Console.WriteLine("Items:");
-            foreach (var item in _combat.Player.Inventory.Where(x => x.CanUse))
+            foreach (IUsableItem item in _combat.Player.Inventory)
             {
+                var itemDamage = item.GetDamage(_combat.Entity).Amount;
                 if (_selectedOption == index)
                 {
                     ColorConsole(true);
                 }
-                Console.WriteLine(item.Name);
+                Console.WriteLine($"{item.Name}[{item.Charges}] - {itemDamage} Damage");
                 index++;
                 ColorConsole(false);
             }
@@ -116,7 +118,7 @@ namespace JRPG.States
                 }
                 else if (_selectedOption > abilityCount - 1)
                 {
-                    _combat.UseItem(_combat.Player.Inventory.Where(x => x.CanUse).ElementAt(_selectedOption - abilityCount));
+                    _combat.UseItem(_combat.Player.Inventory.Where(x => x.CanUse).ElementAt(_selectedOption - abilityCount) as IUsableItem);
                 }
             }
             if (!_combatEnded)
