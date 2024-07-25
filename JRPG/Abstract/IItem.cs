@@ -7,9 +7,7 @@ namespace JRPG.Abstract
     public interface IItem
     {
         string Name { get; }
-        bool CanEquip { get; }
-        bool CanUse { get; }
-
+        //TODO: The calculation for GetDamage for IUsableItem(s) has been moved to the Consumable class. ModifyDamage calculation should be moved to the IEquippableItem interface and Gear class
         Damage GetDamage(ICombatEntity entity);
         Damage ModifyDamage (Damage damage);
         int GetDamageModifier();

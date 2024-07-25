@@ -8,5 +8,8 @@ namespace JRPG.Abstract
     {
         int Charges { get; }
         void UseCharge();
+        string GetEffect();
+        int GetAmount(string effect);
+        Damage GetDamage(ICombatEntity entity);
     }
 }

@@ -8,7 +8,7 @@ namespace JRPG.Models
     public class Gear : Item, IEquippableItem
     {
         public int Weight { get; private set; }
-        public Gear(string name, int? damageModifier = null, int? totalDamage = null,int? weight = null) : base(name, true, false, damageModifier, totalDamage)
+        public Gear(string name, int? damageModifier = null, int? totalDamage = null,int? weight = null) : base(name, damageModifier, totalDamage)
         {
             Weight = weight ?? 5;
         }

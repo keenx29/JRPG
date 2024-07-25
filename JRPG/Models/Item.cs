@@ -10,15 +10,9 @@ namespace JRPG.Models
         private int _damageModifier;
         private int _totalDamage;
         public string Name {  get; private set; }
-
-        public bool CanEquip { get; private set; }
-
-        public bool CanUse { get; private set; }
-        public Item(string name, bool canEquip, bool canUse, int? damageModifier = null, int? totalDamage = null) 
+        public Item(string name, int? damageModifier = null, int? totalDamage = null) 
         {
             Name = name;
-            CanEquip = canEquip;
-            CanUse = canUse;
             _damageModifier = damageModifier ?? 0;
             _totalDamage = totalDamage ?? 0;
         }

@@ -69,7 +69,7 @@ namespace JRPG
                 (new DialogScreen(
                     "Have this item!",
                     e => e.GetComponent<PlayerComponent>().Player.AddItem(
-                        new Item("Armor", true, false,-5))))));
+                        new Item("Quest Item"))))));
             npc1.AddComponent(new SpriteComponent { Sprite = '!' });
             npc1.Position = new Vector3(2, 1, 0);
 
@@ -79,6 +79,9 @@ namespace JRPG
             trader.AddItem(new Gear("Armor",-8));
             trader.AddItem(new Gear("Armor",-8,weight:5));
             trader.AddItem(new Gear("Armor",-8,weight:5));
+            trader.AddItem(new Consumable("Potion of Healing",3,health: 25));
+            trader.AddItem(new Consumable("Potion of Protection", 1, armor: 10));
+            trader.AddItem(new Consumable("Potion of Rage", 5,damage: 50));
             npc2.AddComponent(new BarterComponent(() => new Barter(playerModel, trader)));
             npc2.AddComponent(new SpriteComponent { Sprite = '?' });
 

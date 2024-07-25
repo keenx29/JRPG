@@ -29,6 +29,12 @@ namespace JRPG.States
         }
         private void Render()
         {
+            var optionCount = _combat.Player.Abilities.Count() + _combat.Player.Inventory.Where(x => x is IUsableItem).Count();
+            //Corrects the _selectedOption index when an item with only 1 charge is used an removed from the Inventory of the player
+            if (_selectedOption >= optionCount)
+            {
+                _selectedOption = optionCount - 1;
+            }
             RenderHeader();
             Console.WriteLine("Abilities:");
             var index = 0;
@@ -53,7 +59,15 @@ namespace JRPG.States
                 {
                     ColorConsole(true);
                 }
-                Console.WriteLine($"{item.Name}[{item.Charges}] - {itemDamage} Damage");
+                if (itemDamage != 0)
+                {
+                    Console.WriteLine($"{item.Name}[{item.Charges}] - {itemDamage} Damage");
+                }
+                else
+                {
+                    Console.WriteLine($"{item.Name}[{item.Charges}] - {item.GetEffect()}");
+                }
+                
                 index++;
                 ColorConsole(false);
             }
@@ -94,7 +108,7 @@ namespace JRPG.States
         public void ProcessInput(ConsoleKeyInfo key)
         {
             var abilityCount = _combat.Player.Abilities.Count();
-            var itemCount = _combat.Player.Inventory.Where(x => x.CanUse).Count();
+            var itemCount = _combat.Player.Inventory.Where(x => x is IUsableItem).Count();
             var totalCount = abilityCount + itemCount;
             if (key.Key == ConsoleKey.W)
             {
@@ -118,7 +132,7 @@ namespace JRPG.States
                 }
                 else if (_selectedOption > abilityCount - 1)
                 {
-                    _combat.UseItem(_combat.Player.Inventory.Where(x => x.CanUse).ElementAt(_selectedOption - abilityCount) as IUsableItem);
+                    _combat.UseItem(_combat.Player.Inventory.Where(x => x is IUsableItem).ElementAt(_selectedOption - abilityCount) as IUsableItem);
                 }
             }
             if (!_combatEnded)

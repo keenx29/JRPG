@@ -19,6 +19,7 @@ namespace JRPG.Models
         public int Hp { get; private set; }
         public int Gold { get; private set; }
         public int AttackSpeed { get; private set; }
+        public int Armor { get; private set; }
         public Player() 
         {
             _equippedItems = new List<IEquippableItem>();
@@ -84,6 +85,10 @@ namespace JRPG.Models
                     AttackSpeed -= item.Weight;
                 }
             }
+        }
+        public void Heal(int amount)
+        {
+            Hp += amount;
         }
     }
 }

@@ -19,18 +19,36 @@ namespace JRPG.Models
         }
         public void UseItem(IUsableItem item)
         {
-            if (item is IUsableItem)
+            if (item is IUsableItem && item.Charges > 0)
             {
-                if (item.Charges > 0)
+                var effect = item.GetEffect();
+                if (effect == "attack")
                 {
-                    PerformAction(item.GetDamage(Entity));
+                    var damage = item.GetDamage(Entity);
+                    PerformAction(damage);
                     item.UseCharge();
-                    if (item.Charges == 0)
-                    {
-                        Player.RemoveItem(item);
-                    }
                 }
-                
+                else if (effect == "protect")
+                {
+                    //TODO: Add armor to the player to reduce the damage
+                    //TODO: Make the armor last for a specific turn number
+                    item.UseCharge();
+                }
+                else if (effect == "heal")
+                {
+                    var healingAmount = item.GetAmount(effect);
+                    Player.Heal(healingAmount);
+                    Player.TakeDamage(Entity.GetDamage(Player));
+                    //TODO: When the player heals he should lose his turn and take damage from the mob
+                    /*TODO: Make the necessary checks for taking damage i.e. check health of the player, check if player died after the damage, display message,
+                    Best way to implent it is probably by separating the PerformAction method into 2 for Player taking damage and Entity taking damage*/
+                    item.UseCharge();
+                    
+                }
+                if (item.Charges == 0)
+                {
+                    Player.RemoveItem(item);
+                }
                 return;
             }
             else
