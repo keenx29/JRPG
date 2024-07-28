@@ -115,7 +115,6 @@ namespace JRPG.States
                             break;
                     }
                 }
-                Console.WriteLine($"{item.Name} - {_barter.Entity.GetSalePrice(item)}g");
                 index++;
                 ColorConsole(false);
             }
