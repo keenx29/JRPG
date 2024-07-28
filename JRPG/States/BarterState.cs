@@ -112,7 +112,6 @@ namespace JRPG.States
                             Console.WriteLine($"{usableItem.Name}[{usableItem.Charges}] - {modifier} Damage Bonus - {_barter.Entity.GetBuyPrice(usableItem)}g");
                             break;
                         default:
-                            Console.WriteLine($"{usableItem.Name} - {_barter.Entity.GetBuyPrice(usableItem)}g");
                             break;
                     }
                 }
