@@ -15,10 +15,14 @@ namespace JRPG
             Amount = amount;
         }
 
-        public Damage ModifyAmount(int delta) 
+        public Damage ReduceAmount(int delta) 
         { 
             return new Damage(Text, Amount - delta);
         }
-        
+
+        public Damage IncreaseAmount(int delta) 
+        { 
+            return new Damage(Text, Amount + delta);
+        }
     }
 }

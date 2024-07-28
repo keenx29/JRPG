@@ -18,7 +18,7 @@ namespace JRPG.Models
 
         public Damage ModifyDamage(Damage damage)
         {
-            return damage.ModifyAmount(Defense);
+            return damage.ReduceAmount(Defense);
         }
 
         public int GetDamageModifier()

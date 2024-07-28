@@ -39,7 +39,15 @@ namespace JRPG.States
                 }
                 if (equippableItem != null)
                 {
-                    Console.WriteLine($"{equippableItem.Name} - {equippableItem.Defense} Defense - {_barter.Entity.GetBuyPrice(equippableItem)}g");
+                    var damageModifier = equippableItem.GetDamageModifier();
+                    if (equippableItem is Gear)
+                    {
+                        Console.WriteLine($"{equippableItem.Name} - {damageModifier} Defense - {_barter.Entity.GetBuyPrice(equippableItem)}g");
+                    }
+                    else if (equippableItem is Weapon)
+                    {
+                        Console.WriteLine($"{equippableItem.Name} - {damageModifier} Damage - {_barter.Entity.GetBuyPrice(equippableItem)}g");
+                    }
                 }
                 else if (usableItem != null)
                 {
@@ -86,11 +94,11 @@ namespace JRPG.States
                 {
                     if (equippableItem is Gear)
                     {
-                        Console.WriteLine($"{equippableItem.Name} - {equippableItem.Defense} Defense - {_barter.Entity.GetSalePrice(equippableItem)}g");
+                        Console.WriteLine($"{equippableItem.Name} - {equippableItem.GetDamageModifier()} Defense - {_barter.Entity.GetSalePrice(equippableItem)}g");
                     }
                     else if (equippableItem is Weapon)
                     {
-                        Console.WriteLine($"{equippableItem.Name} - {equippableItem.Defense} Damage - {_barter.Entity.GetSalePrice(equippableItem)}g");
+                        Console.WriteLine($"{equippableItem.Name} - {equippableItem.GetDamageModifier()} Damage - {_barter.Entity.GetSalePrice(equippableItem)}g");
                     }
                 }
                 else if (usableItem != null)

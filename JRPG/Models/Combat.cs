@@ -83,7 +83,7 @@ namespace JRPG.Models
             var rawAbilityDamage = ability.GetDamage();
             var calculatedAbilityDamage = new Damage
                 (rawAbilityDamage.Text,
-                rawAbilityDamage.Amount + Player.DamageBuff - (Entity.Defense / 2));
+                rawAbilityDamage.Amount + (Player.AttackDamage / 2) + Player.DamageBuff - (Entity.Defense / 2));
             PerformAction(calculatedAbilityDamage);
         }
         private void HealPlayer(IUsableItem item)

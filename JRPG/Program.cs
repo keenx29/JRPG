@@ -79,6 +79,8 @@ namespace JRPG
             trader.AddItem(new Gear("Armor",8));
             trader.AddItem(new Gear("Armor",5,weight:5));
             trader.AddItem(new Gear("Armor",10,weight:5));
+            trader.AddItem(new Weapon("Sword",attack: 10,weight: 5));
+            trader.AddItem(new Weapon("Sword",attack: 15,weight: 5));
             trader.AddItem(new Consumable("Potion of Healing",3,health: 25));
             trader.AddItem(new Consumable("Potion of Protection", 1, armor: 10));
             trader.AddItem(new Consumable("Potion of Rage", 5,damageBuff: 50));

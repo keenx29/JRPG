@@ -7,23 +7,22 @@ namespace JRPG.Models
 {
     public class Weapon : Item, IEquippableItem
     {
-        public Weapon(string name) : base(name)
+        public Weapon(string name, int? attack = null, int? weight = null) : base(name)
         {
+            Attack = attack ?? 5;
+            Weight = weight ?? 5;
         }
-
-        public int Weight => throw new NotImplementedException();
-
-        public int Defense => throw new NotImplementedException();
-        public int Attack => throw new NotImplementedException();
-
+        public int Attack { get; private set; }
+        public int Defense { get; private set; }
+        public int Weight { get; private set; }
         public int GetDamageModifier()
         {
-            throw new NotImplementedException();
+            return Attack;
         }
 
         public Damage ModifyDamage(Damage damage)
         {
-            throw new NotImplementedException();
+            return damage.IncreaseAmount(damage.Amount);
         }
     }
 }

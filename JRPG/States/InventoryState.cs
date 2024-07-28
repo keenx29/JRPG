@@ -131,11 +131,11 @@ namespace JRPG.States
                     damageModifier = equippableItem.GetDamageModifier();
                     if (equippableItem is Gear)
                     {
-                        Console.WriteLine($"[ ]{equippableItem.Name} - {equippableItem.Defense} Defense");
+                        Console.WriteLine($"[ ]{equippableItem.Name} - {damageModifier} Defense");
                     }
                     else if (equippableItem is Weapon)
                     {
-                        Console.WriteLine($"[ ]{equippableItem.Name} - {equippableItem.Defense} Damage");
+                        Console.WriteLine($"[ ]{equippableItem.Name} - {damageModifier} Damage");
                     }
                 }
                 else if (usableItem != null)

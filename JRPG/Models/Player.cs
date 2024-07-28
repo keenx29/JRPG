@@ -1,5 +1,6 @@
 ﻿using JRPG.Abstract;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,6 +20,7 @@ namespace JRPG.Models
         public int Hp { get; private set; }
         public int Gold { get; private set; }
         public int AttackSpeed { get; private set; }
+        public int AttackDamage { get; private set; }
         public int Defense { get; private set; }
         public int DamageBuff { get; private set; } 
         public Player() 
@@ -84,6 +86,10 @@ namespace JRPG.Models
                 if (item.Defense > 0)
                 {
                     Defense += item.Defense;
+                }
+                if (item.Attack > 0)
+                {
+                    AttackDamage += item.Attack;
                 }
             }
         }
