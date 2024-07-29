@@ -65,11 +65,22 @@ namespace JRPG
             wall.Position = new Vector3(0, 1, 0);
 
             var npc1 = new Entity();
-            npc1.AddComponent(new DialogComponent(new Dialog
-                (new DialogScreen(
-                    "Have this item!",
-                    e => e.GetComponent<PlayerComponent>().Player.AddItem(
-                        new Item("Quest Item"))))));
+            //npc1.AddComponent(new DialogComponent(new Dialog
+            //    (new DialogScreen(
+            //        "Have this item!",
+            //        e => e.GetComponent<PlayerComponent>().Player.AddItem(
+            //            new Item("Quest Item"))))));
+            var dialogScreens = new List<IDialogScreen>();
+            dialogScreens.Add(new DialogScreen($"Greetings {player.GetComponent<SpriteComponent>().Sprite}",
+                "Nice to meet you!"));
+            dialogScreens.Add(new DialogScreen("I need your assistance",
+                "Bring this letter to Ivan for a Reward",
+                e => e.GetComponent<PlayerComponent>().Player.AddItem(new Item("Letter (quest item)")),
+                true));
+
+            var dialog = new Dialog(screens: dialogScreens);
+
+            npc1.AddComponent(new DialogComponent(dialog));
             npc1.AddComponent(new SpriteComponent { Sprite = '!' });
             npc1.Position = new Vector3(2, 1, 0);
 

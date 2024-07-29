@@ -146,6 +146,10 @@ namespace JRPG.States
                     damageModifier = usableItem.GetAmount();
                     Console.WriteLine($"{usableItem.Name} - {damageModifier} {effect}");
                 }
+                else
+                {
+                    Console.WriteLine($"{item.Name}");
+                }
                 ColorConsole(false);
 
                 itemIndex++;
