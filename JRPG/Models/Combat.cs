@@ -90,6 +90,7 @@ namespace JRPG.Models
         {
             var healingAmount = item.GetAmount();
             var listenersCopy = new List<ICombatListener>(_listeners);
+            listenersCopy.ForEach(x => x.DisplayMessage("Player healed for " + healingAmount + " hp from " + item.Name));
             Player.Heal(healingAmount);
             DamagePlayer();
         }
@@ -97,6 +98,7 @@ namespace JRPG.Models
         {
             var buffAmount = item.GetAmount();
             var listenersCopy = new List<ICombatListener>(_listeners);
+            listenersCopy.ForEach(x => x.DisplayMessage("Player buffed for " + buffAmount + " damage from " + item.Name));
             Player.Buff(buffAmount);
             DamagePlayer();
         }

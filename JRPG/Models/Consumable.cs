@@ -42,7 +42,7 @@ namespace JRPG.Models
             }
             else if (Health != 0)
             {
-                return "Health";
+                return "Heal";
             }
             else if (DamageBuff != 0)
             {
