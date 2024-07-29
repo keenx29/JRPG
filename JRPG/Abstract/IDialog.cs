@@ -8,6 +8,7 @@ namespace JRPG.Abstract
 {
     public interface IDialog
     {
-        IDialogScreen FirstScreen { get; }
+        //IDialogScreen FirstScreen { get; }
+        List<IDialogScreen> Screens { get; }
     }
 }
