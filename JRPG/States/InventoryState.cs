@@ -95,17 +95,18 @@ namespace JRPG.States
             var damageModifier = 0;
             foreach (var item in _player.EquippedItems)
             {
-                damageModifier = item.GetDamageModifier();
                 if (itemIndex == _selectedItem)
                 {
                     ColorConsole(true);
                 }
                 if (item is Gear)
                 {
+                    damageModifier = item.GetDefenseModifier();
                     Console.WriteLine($"[*] {item.Name} - {(damageModifier)} Defense");
                 }
                 else if (item is Weapon)
                 {
+                    damageModifier = item.GetDamageModifier();
                     Console.WriteLine($"[*] {item.Name} - {damageModifier} Damage");
                 }
                 else
@@ -128,13 +129,14 @@ namespace JRPG.States
                 var usableItem = item as IUsableItem;
                 if (equippableItem != null)
                 {
-                    damageModifier = equippableItem.GetDamageModifier();
                     if (equippableItem is Gear)
                     {
+                        damageModifier = equippableItem.GetDefenseModifier();
                         Console.WriteLine($"[ ]{equippableItem.Name} - {damageModifier} Defense");
                     }
                     else if (equippableItem is Weapon)
                     {
+                        damageModifier = equippableItem.GetDamageModifier();
                         Console.WriteLine($"[ ]{equippableItem.Name} - {damageModifier} Damage");
                     }
                 }

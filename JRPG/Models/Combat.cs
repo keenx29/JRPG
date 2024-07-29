@@ -141,7 +141,7 @@ namespace JRPG.Models
                 }
 
                 var rawEnemyDamage = Entity.GetDamage(Player);
-                var calculatedEnemyDamage = new Damage(rawEnemyDamage.Text, rawEnemyDamage.Amount - Player.Defense);
+                var calculatedEnemyDamage = new Damage(rawEnemyDamage.Text, rawEnemyDamage.Amount - (Player.Defense / 2));
                 listenersCopy.ForEach(x => x.DisplayMessage("Player took " + calculatedEnemyDamage.Amount + " damage from " + calculatedEnemyDamage.Text));
                 Player.TakeDamage(calculatedEnemyDamage);
                 if (Player.Hp <= 0)
@@ -151,9 +151,10 @@ namespace JRPG.Models
             }
             else
             {
-                var enemyDamage = Entity.GetDamage(Player);
-                listenersCopy.ForEach(x => x.DisplayMessage("Player took " + enemyDamage.Amount + " damage from " + enemyDamage.Text));
-                Player.TakeDamage(enemyDamage);
+                var rawEnemyDamage = Entity.GetDamage(Player);
+                var calculatedEnemyDamage = new Damage(rawEnemyDamage.Text, rawEnemyDamage.Amount - (Player.Defense / 2));
+                listenersCopy.ForEach(x => x.DisplayMessage("Player took " + calculatedEnemyDamage.Amount + " damage from " + calculatedEnemyDamage.Text));
+                Player.TakeDamage(calculatedEnemyDamage);
                 if (Player.Hp <= 0)
                 {
                     listenersCopy.ForEach(x => x.PlayerDied());

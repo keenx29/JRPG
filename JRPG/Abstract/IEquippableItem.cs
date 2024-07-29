@@ -10,6 +10,7 @@ namespace JRPG.Abstract
         int Defense { get; }
         int Attack { get; }
         Damage ModifyDamage(Damage damage);
+        int GetDefenseModifier();
         int GetDamageModifier();
     }
 }

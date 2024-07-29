@@ -21,9 +21,14 @@ namespace JRPG.Models
             return damage.ReduceAmount(Defense);
         }
 
-        public int GetDamageModifier()
+        public int GetDefenseModifier()
         {
             return Defense;
+        }
+
+        public int GetDamageModifier()
+        {
+            return Attack;
         }
     }
 }

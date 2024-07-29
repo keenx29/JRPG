@@ -15,9 +15,15 @@ namespace JRPG.Models
         public int Attack { get; private set; }
         public int Defense { get; private set; }
         public int Weight { get; private set; }
+
         public int GetDamageModifier()
         {
             return Attack;
+        }
+
+        public int GetDefenseModifier()
+        {
+            return Defense;
         }
 
         public Damage ModifyDamage(Damage damage)
