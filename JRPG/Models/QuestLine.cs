@@ -19,6 +19,7 @@ namespace JRPG.Models
 
         public QuestLine(string name)
         {
+            Quests = new Queue<IQuest>();
             Name = name;
             _remainingQuests = new Queue<IQuest>();
             _completedQuests = new List<IQuest>();
@@ -55,7 +56,7 @@ namespace JRPG.Models
         public void Abandon(IQuest quest)
         {
             if (_remainingQuests.Count > 0 && _remainingQuests.Peek() == quest)
-            {
+        {
                 quest.DeactivateQuest();
             }
         }

@@ -48,6 +48,10 @@ namespace JRPG.States
             {
                 Program.Engine.PushState(new QuestLogState(_player));
             }
+            if (key.Key == ConsoleKey.L)
+            {
+                Program.Engine.PushState(new QuestLogState(_player));
+            }
         }
     }
 }

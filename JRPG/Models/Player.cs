@@ -135,5 +135,12 @@ namespace JRPG.Models
                 }
             }
         }
+        public void StartQuestLine(IQuestLine questLine)
+        {
+            if (!_quests.Contains(questLine))
+            {
+                _quests.Add(questLine); 
+            }
+        }
     }
 }

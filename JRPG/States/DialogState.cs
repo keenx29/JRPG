@@ -70,6 +70,7 @@ namespace JRPG.States
 
                 if (_currentScreen.IsFinalScreen)
                 {
+                    _currentScreen.EnterScreen(_instigator);
                     Program.Engine.PopState(this);
                     return;
                 }
