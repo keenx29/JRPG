@@ -18,7 +18,8 @@ namespace JRPG.States
         {
             Console.Clear();
             Console.WriteLine("IN MAIN MENU STATE - press Enter for inventory");
-            Console.WriteLine("Enter for inventory");
+            Console.WriteLine("Enter for Inventory");
+            Console.WriteLine("L for Quest Log");
             Console.WriteLine("ESC to go back");
         }
 
@@ -41,6 +42,10 @@ namespace JRPG.States
             if (key.Key == ConsoleKey.Enter)
             {
                 Program.Engine.PushState(new InventoryState(_player));
+            }
+            if (key.Key == ConsoleKey.L)
+            {
+                Program.Engine.PushState(new QuestLogState(_player));
             }
         }
     }

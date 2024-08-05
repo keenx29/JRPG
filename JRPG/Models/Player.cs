@@ -13,10 +13,11 @@ namespace JRPG.Models
         private readonly List<IEquippableItem> _equippedItems;
         private readonly List<IItem> _inventory;
         private readonly List<IAbility> _abilities;
-
+        private readonly List<IQuestLine> _quests;
         public IEnumerable<IEquippableItem> EquippedItems { get { return _equippedItems; } }
         public IEnumerable<IItem> Inventory { get { return _inventory; } }
         public IEnumerable<IAbility> Abilities { get { return _abilities; } }
+        public IEnumerable<IQuestLine> Quests { get { return _quests; } }
         public int Hp { get; private set; }
         public int Gold { get; private set; }
         public int AttackSpeed { get; private set; }
@@ -28,6 +29,7 @@ namespace JRPG.Models
             _equippedItems = new List<IEquippableItem>();
             _inventory = new List<IItem>();
             _abilities = new List<IAbility>();
+            _quests = new List<IQuestLine>();
             Hp = 200;
             Gold = 1000;
             AttackSpeed = 10;
@@ -104,6 +106,13 @@ namespace JRPG.Models
         public void ResetBuff()
         {
             DamageBuff = 0;
+        }
+        public void StartQuestLine(IQuestLine questLine)
+        {
+            if (!_quests.Contains(questLine))
+            {
+                _quests.Add(questLine); 
+            }
         }
     }
 }

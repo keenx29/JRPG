@@ -98,6 +98,21 @@ namespace JRPG
             npc2.AddComponent(new BarterComponent(() => new Barter(playerModel, trader)));
             npc2.AddComponent(new SpriteComponent { Sprite = '?' });
 
+
+            var npc3 = new Entity();
+            npc3.Position = new Vector3(8, 1, 0);
+            var questLine = new QuestLine("Welcome aboard");
+            var questReward = new Weapon("Defender", 20, 10);
+            var quest = new Quest("Inform the villagers",
+                "A man wandering in the woods is telling you that there is danger coming.",
+                10,requirement: null, questReward);
+            questLine.AddQuest(quest);
+            var questDialogScreen = new DialogScreen(quest.Title,quest.Description + " Please take this letter to George",
+                e => e.GetComponent<PlayerComponent>().Player.StartQuestLine(questLine),true);
+            var questDialog = new Dialog(questDialogScreen);
+            npc3.AddComponent(new DialogComponent(questDialog));
+            npc3.AddComponent(new SpriteComponent { Sprite = '|' });
+
             var zone1 = new Zone("Zone 1", new Vector3(ZoneWidth, ZoneHeight, ZoneDepth));
             zone1.AddEntity(player);
             zone1.AddEntity(tallGrass);
@@ -105,6 +120,7 @@ namespace JRPG
             zone1.AddEntity(wall);
             zone1.AddEntity(npc1);
             zone1.AddEntity(npc2);
+            zone1.AddEntity(npc3);
             
             Engine = new Engine();
             Engine.PushState(new ZoneState(player,zone1));

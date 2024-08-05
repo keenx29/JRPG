@@ -14,6 +14,7 @@ namespace JRPG.Models
 
         public Barter(Player player, Trader entity)
         {
+            _listeners = new List<IBarterListener>();
             Player = player;
             Entity = entity;
         }
