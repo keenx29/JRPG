@@ -14,18 +14,19 @@ namespace JRPG.States
         private int _dialogHeight;
         private int _selectedOption;
         private IDialogScreen _currentScreen;
-
+        private List<Tuple<string, IDialogScreen>> _optionList;
         //private readonly IDialog _dialog;
         //private readonly Entity _instigator;
         //private int _dialogHeight;
         //private int _selectedOption;
         //private IDialogScreen _currentScreen;
-        //private List<Tuple<string, IDialogScreen>> _optionList;
+
         public DialogState(IDialog dialog, Entity instigator)
         {
             _dialog = dialog;
             _instigator = instigator;
-            _currentScreen = _dialog.Screens.First();
+            //_currentScreen = _dialog.Screens.First();
+            SwitchScreen(_dialog.Screens.First());
             //SwitchScreen(_dialog.FirstScreen);
         }
         public void Activate()
@@ -54,25 +55,27 @@ namespace JRPG.States
             }
             else if (key.Key == ConsoleKey.S)
             {
-                if (_selectedOption < 1)
+                if (_selectedOption < _optionList.Count)
                 {
                     _selectedOption++;
                 }
             }
             else if (key.Key == ConsoleKey.Enter || key.Key == ConsoleKey.Spacebar)
             {
+                var currentScreenIndex = _dialog.Screens.IndexOf(_currentScreen);
+
                 if (_currentScreen.IsFinalScreen)
                 {
                     Program.Engine.PopState(this);
+                    return;
                 }
                 else
                 {
-                    var currentScreenIndex = _dialog.Screens.IndexOf(_currentScreen);
-                    var nextScreen = _dialog.Screens[currentScreenIndex + 1];
+                    var nextScreen = _optionList[_selectedOption].Item2 ?? _currentScreen;
                     SwitchScreen(nextScreen);
-                    RenderScreen();
                 }
             }
+            RenderScreen();
             //if (_optionList.Count != 0)
             //{
             //    ColorConsole(false);
@@ -116,8 +119,8 @@ namespace JRPG.States
         private void SwitchScreen(IDialogScreen screen)
         {
             _currentScreen = screen;
-            //_optionList = _currentScreen.NextScreens.Select(x => Tuple.Create(x.Key, x.Value)).ToList();
-            //_selectedOption = 0;
+            _optionList = _currentScreen.OptionalScreens.Select(x => Tuple.Create(x.Key, x.Value)).ToList();
+            _selectedOption = 0;
             _currentScreen.EnterScreen(_instigator);
         }
     
@@ -130,14 +133,25 @@ namespace JRPG.States
             Console.WriteLine("-------------------------------------------");
             _dialogHeight = Console.CursorTop;
             var index = 0;
-            ColorConsole(true);
+            
+            foreach (var option in _optionList)
+            {
+                if (index == _selectedOption)
+                {
+                    ColorConsole(true);
+                }
+                Console.WriteLine(option.Item1);
+                ColorConsole(false);
+                index++;
+            }
+
+            if (_selectedOption == _optionList.Count)
+            {
+                ColorConsole(true);
+            }
             if (_currentScreen.IsFinalScreen)
             {
                 Console.WriteLine("Exit Dialog!");
-            }
-            else
-            {
-                Console.WriteLine("Continue!");
             }
             ColorConsole(false);
             //Console.Clear();

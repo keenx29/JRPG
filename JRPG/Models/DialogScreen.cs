@@ -14,12 +14,16 @@ namespace JRPG.Models
 
         public string Title { get; private set; }
 
+        public Dictionary<string, IDialogScreen> OptionalScreens { get; private set; }
         public DialogScreen(string title,string text,
-            Action<Entity> reward = null,bool isFinalScreen = false)
+            Action<Entity> reward = null,
+            Dictionary<string, IDialogScreen> optionalScreens = null,
+            bool isFinalScreen = false)
         {
             Title = title;
             Text = text;
             _reward = reward;
+            OptionalScreens = optionalScreens ?? new Dictionary<string, IDialogScreen>();
             IsFinalScreen = isFinalScreen;
         }
         public void EnterScreen(Entity entity)
