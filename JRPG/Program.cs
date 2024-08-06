@@ -4,6 +4,7 @@ using JRPG.Models.Components;
 using JRPG.States;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace JRPG
 {
@@ -103,12 +104,16 @@ namespace JRPG
             npc3.Position = new Vector3(8, 1, 0);
             var questLine = new QuestLine("Welcome aboard");
             var questReward = new Weapon("Defender", 20, 10);
-            var quest = new Quest("Inform the villagers",
-                "A man wandering in the woods is telling you that there is danger coming.",
-                10,requirement: null, questReward);
+            var quest = new Quest("Bring help",
+                "A man wandering in the woods is hurt and needs supplies.",
+                10,requirement: e => e.GetComponent<PlayerComponent>().Player.Inventory.Contains(new Consumable("Potion of Healing")), questReward);
             questLine.AddQuest(quest);
-            var questDialogScreen = new DialogScreen(quest.Title,quest.Description + " Please take this letter to George",
-                e => e.GetComponent<PlayerComponent>().Player.StartQuestLine(questLine),true);
+            var questDialogScreen = new DialogScreen(quest.Title, (quest.Description + "\nPlease take this gold and speak with the Trader"),
+                (e) => {
+                    var player = e.GetComponent<PlayerComponent>().Player;
+                    player.StartQuestLine(questLine);
+                    player.ReceiveGold(50);
+                    }, true);
             var questDialog = new Dialog(questDialogScreen);
             npc3.AddComponent(new DialogComponent(questDialog));
             npc3.AddComponent(new SpriteComponent { Sprite = '|' });
