@@ -21,7 +21,7 @@ namespace JRPG.Models
         {
             Quests.Enqueue(quest);
         }
-        public void CompleteQuest()
+        public void RemoveQuest()
         {
             Quests.Dequeue();
         }

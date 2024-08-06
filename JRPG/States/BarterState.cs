@@ -56,16 +56,16 @@ namespace JRPG.States
                     var modifier = usableItem.GetAmount();
                     switch (effect)
                     {
-                        case "attack":
+                        case "Damage":
                             Console.WriteLine($"{usableItem.Name}[{usableItem.Charges}] - {modifier} Damage - {_barter.Entity.GetBuyPrice(usableItem)}g");
                             break;
-                        case "protect":
+                        case "Defense":
                             Console.WriteLine($"{usableItem.Name}[{usableItem.Charges}] - {modifier} Defense - {_barter.Entity.GetBuyPrice(usableItem)}g");
                             break;
-                        case "heal":
+                        case "Heal":
                             Console.WriteLine($"{usableItem.Name}[{usableItem.Charges}] - {modifier} Health - {_barter.Entity.GetBuyPrice(usableItem)}g");
                             break;
-                        case "buff":
+                        case "Damage Bonus":
                             Console.WriteLine($"{usableItem.Name}[{usableItem.Charges}] - {modifier} Damage Bonus - {_barter.Entity.GetBuyPrice(usableItem)}g");
                             break;
                         default:
@@ -108,16 +108,16 @@ namespace JRPG.States
                     var modifier = usableItem.GetAmount();
                     switch (effect)
                     {
-                        case "attack":
+                        case "Damage":
                             Console.WriteLine($"{usableItem.Name}[{usableItem.Charges}] - {modifier} Damage - {_barter.Entity.GetBuyPrice(usableItem)}g");
                             break;
-                        case "protect":
+                        case "Defense":
                             Console.WriteLine($"{usableItem.Name}[{usableItem.Charges}] - {modifier} Defense - {_barter.Entity.GetBuyPrice(usableItem)}g");
                             break;
-                        case "heal":
+                        case "Heal":
                             Console.WriteLine($"{usableItem.Name}[{usableItem.Charges}] - {modifier} Health - {_barter.Entity.GetBuyPrice(usableItem)}g");
                             break;
-                        case "buff":
+                        case "Damage Bonus":
                             Console.WriteLine($"{usableItem.Name}[{usableItem.Charges}] - {modifier} Damage Bonus - {_barter.Entity.GetBuyPrice(usableItem)}g");
                             break;
                         default:

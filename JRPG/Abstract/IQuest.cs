@@ -7,7 +7,7 @@ namespace JRPG.Abstract
     {
         string Description { get; }
         int Experience { get; }
-        Action<Entity> Requirement { get; }
+        Func<Entity,bool> Requirement { get; }
         IItem Reward { get; }
         string Title { get; }
     }

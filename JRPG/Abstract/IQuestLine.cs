@@ -8,7 +8,7 @@ namespace JRPG.Abstract
         string Name { get; }
         Queue<IQuest> Quests { get; }
         void AddQuest(IQuest quest);
-        void CompleteQuest();
+        void RemoveQuest();
         //bool IsCompleted(IQuest quest);
         //void RemoveQuest(IQuest quest);
     }

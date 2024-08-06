@@ -128,7 +128,7 @@ namespace JRPG
                     var player = e.GetComponent<PlayerComponent>().Player;
                     player.StartQuestLine(questLine);
                     player.ReceiveGold(50);
-                    }, true);
+                    },isFinalScreen: true);
             var questDialog = new Dialog(questDialogScreen);
             npc3.AddComponent(new DialogComponent(questDialog));
             npc3.AddComponent(new SpriteComponent { Sprite = '|' });
