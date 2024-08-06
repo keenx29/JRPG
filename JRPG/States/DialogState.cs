@@ -55,7 +55,11 @@ namespace JRPG.States
             }
             else if (key.Key == ConsoleKey.S)
             {
+<<<<<<< HEAD
                 if (_selectedOption < _optionList.Count - 1)
+=======
+                if (_selectedOption < _optionList.Count)
+>>>>>>> 21b86d8 (Dialog can now handle multiple response options.)
                 {
                     _selectedOption++;
                 }
