@@ -55,7 +55,7 @@ namespace JRPG.States
             }
             else if (key.Key == ConsoleKey.S)
             {
-                if (_selectedOption < _optionList.Count)
+                if (_selectedOption < _optionList.Count - 1)
                 {
                     _selectedOption++;
                 }
