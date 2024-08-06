@@ -72,12 +72,27 @@ namespace JRPG
             //        e => e.GetComponent<PlayerComponent>().Player.AddItem(
             //            new Item("Quest Item"))))));
             var dialogScreens = new List<IDialogScreen>();
-            dialogScreens.Add(new DialogScreen($"Greetings {player.GetComponent<SpriteComponent>().Sprite}",
-                "Nice to meet you!"));
-            dialogScreens.Add(new DialogScreen("I need your assistance",
+
+            var optionalScreens = new Dictionary<string, IDialogScreen>
+            {
+                {
+                    "Great!",
+                    new DialogScreen("I need your assistance",
                 "Bring this letter to Ivan for a Reward",
                 e => e.GetComponent<PlayerComponent>().Player.AddItem(new Item("Letter (quest item)")),
-                true));
+                isFinalScreen: true)
+                },
+                {
+                    "Okay!",
+                    new DialogScreen("Are you sure?",
+                "Tell me what is going on...",
+                isFinalScreen: true)
+                }
+            };
+
+            dialogScreens.Add(new DialogScreen(
+                $"Greetings {player.GetComponent<SpriteComponent>().Sprite}",
+                "Nice to meet you! How are you doing?",optionalScreens: optionalScreens));
 
             var dialog = new Dialog(screens: dialogScreens);
 

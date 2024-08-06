@@ -12,7 +12,7 @@ namespace JRPG.Abstract
         string Title { get; }
         //bool FinalScreen { get; }
         //string Text { get; }
-        //Dictionary<string,IDialogScreen> NextScreens { get; }
+        Dictionary<string,IDialogScreen> OptionalScreens { get; }
         void EnterScreen(Entity entity);
     }
 }
