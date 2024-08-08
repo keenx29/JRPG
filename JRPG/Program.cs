@@ -115,23 +115,51 @@ namespace JRPG
             npc2.AddComponent(new SpriteComponent { Sprite = '?' });
 
 
+            //var npc3 = new Entity();
+            //npc3.Position = new Vector3(8, 1, 0);
+            //var questLine = new QuestLine("Welcome aboard");
+            //var questReward = new Weapon("Defender", 20, 10);
+            //var quest = new Quest("Bring help",
+            //    "A man wandering in the woods is hurt and needs supplies.",
+            //    10,requirement: e => e.GetComponent<PlayerComponent>().Player.Inventory.Contains(new Consumable("Potion of Healing")), questReward);
+            //questLine.AddQuest(quest);
+            //var questDialogScreen = new DialogScreen(quest.Title, (quest.Description + "\nPlease take this gold and speak with the Trader"),
+            //    (e) => {
+            //        var player = e.GetComponent<PlayerComponent>().Player;
+            //        player.StartQuestLine(questLine);
+            //        player.ReceiveGold(50);
+            //        },isFinalScreen: true);
+            //var questDialog = new Dialog(questDialogScreen);
+            //npc3.AddComponent(new DialogComponent(questDialog));
+            //npc3.AddComponent(new SpriteComponent { Sprite = '|' });
+            
             var npc3 = new Entity();
             npc3.Position = new Vector3(8, 1, 0);
-            var questLine = new QuestLine("Welcome aboard");
+            var questLine = new QuestLine("War is upon us.");
             var questReward = new Weapon("Defender", 20, 10);
-            var quest = new Quest("Bring help",
-                "A man wandering in the woods is hurt and needs supplies.",
-                10,requirement: e => e.GetComponent<PlayerComponent>().Player.Inventory.Contains(new Consumable("Potion of Healing")), questReward);
+            var quest = new DeliveryQuest("Inform the villagers!",
+                "An army is marching towards us...",
+                10,requirement: (e) => true, questReward);
             questLine.AddQuest(quest);
-            var questDialogScreen = new DialogScreen(quest.Title, (quest.Description + "\nPlease take this gold and speak with the Trader"),
+            var questDialogScreen = new DialogScreen(quest.Title, (quest.Description + "\nPlease take this information to everyone"),
                 (e) => {
                     var player = e.GetComponent<PlayerComponent>().Player;
                     player.StartQuestLine(questLine);
-                    player.ReceiveGold(50);
                     },isFinalScreen: true);
             var questDialog = new Dialog(questDialogScreen);
             npc3.AddComponent(new DialogComponent(questDialog));
             npc3.AddComponent(new SpriteComponent { Sprite = '|' });
+            
+            var npc4 = new Entity();
+            npc4.Position = new Vector3(10, 1, 0);
+            var questDialogScreen2 = new DialogScreen(quest.Title, ("Thank you so for bringing this to us!"), (e) =>
+            {
+                quest.CompleteQuest(e);
+                playerModel.CompleteQuest(questLine);
+            }, isFinalScreen: true);
+            var questDialog2 = new Dialog(questDialogScreen2);
+            npc4.AddComponent(new DialogComponent(questDialog2));
+            npc4.AddComponent(new SpriteComponent { Sprite = 'D' });
 
             var zone1 = new Zone("Zone 1", new Vector3(ZoneWidth, ZoneHeight, ZoneDepth));
             zone1.AddEntity(player);
@@ -141,6 +169,7 @@ namespace JRPG
             zone1.AddEntity(npc1);
             zone1.AddEntity(npc2);
             zone1.AddEntity(npc3);
+            zone1.AddEntity(npc4);
             
             Engine = new Engine();
             Engine.PushState(new ZoneState(player,zone1));

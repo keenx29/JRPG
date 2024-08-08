@@ -114,5 +114,15 @@ namespace JRPG.Models
                 _quests.Add(questLine); 
             }
         }
+        public void CompleteQuest(IQuestLine questLine)
+        {
+            foreach (var qLine in _quests)
+            {
+                if (qLine == questLine)
+                {
+                    qLine.RemoveQuest();
+                }
+            }
+        }
     }
 }

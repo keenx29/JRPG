@@ -1,5 +1,6 @@
 ﻿using JRPG.Abstract;
 using JRPG.Models;
+using JRPG.Models.Components;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,8 +9,8 @@ namespace JRPG.States
 {
     class MainMenuState : IEngineState
     {
-        private readonly Player _player;
-        public MainMenuState(Player player)
+        private readonly Entity _player;
+        public MainMenuState(Entity player)
         {
             _player = player;
         }
@@ -41,7 +42,7 @@ namespace JRPG.States
             }
             if (key.Key == ConsoleKey.Enter)
             {
-                Program.Engine.PushState(new InventoryState(_player));
+                Program.Engine.PushState(new InventoryState(_player.GetComponent<PlayerComponent>().Player));
             }
             if (key.Key == ConsoleKey.L)
             {

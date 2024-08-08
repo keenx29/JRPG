@@ -1,5 +1,6 @@
 ﻿using JRPG.Abstract;
 using JRPG.Models;
+using JRPG.Models.Components;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,9 +9,9 @@ namespace JRPG.States
 {
     public class QuestLogState : IEngineState
     {
-        private readonly Player _player;
+        private readonly Entity _player;
         private int _selectedQuest;
-        public QuestLogState(Player player)
+        public QuestLogState(Entity player)
         {
             _player = player;
         }
@@ -21,17 +22,21 @@ namespace JRPG.States
 
         public void Deactivate()
         {
-            throw new NotImplementedException();
+            
         }
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            
         }
 
         public void ProcessInput(ConsoleKeyInfo key)
         {
-            
+            if (key.Key == ConsoleKey.Escape)
+            {
+                Program.Engine.PopState(this);
+                return;
+            }
         }
         private void Render()
         {
@@ -39,7 +44,7 @@ namespace JRPG.States
             Console.WriteLine("Quest Log");
             Console.WriteLine("-------------------------------------");
             var questIndex = 0;
-            foreach (var questLine in _player.Quests)
+            foreach (var questLine in _player.GetComponent<PlayerComponent>().Player.Quests)
             {
                 foreach (var quest in questLine.Quests)
                 {
@@ -47,7 +52,7 @@ namespace JRPG.States
                     {
                         ColorConsole(true);
                     }
-                    Console.WriteLine($"{quest.Title} - {quest.Reward.Name}");
+                    Console.WriteLine($"{quest.Title} - {quest.Reward.Name} - {(quest.Requirement(_player) == true ? "Done" : "In Progress")}");
                     ColorConsole(false);
                 }
                 questIndex++;

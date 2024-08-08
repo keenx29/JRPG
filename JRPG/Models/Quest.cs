@@ -6,7 +6,7 @@ using System.Text;
 
 namespace JRPG.Models
 {
-    public class Quest : IQuest
+    public abstract class Quest : IQuest
     {
         public string Title { get; private set; }
         public string Description { get; private set; }
@@ -22,11 +22,12 @@ namespace JRPG.Models
             Requirement = requirement;
             Reward = reward;
         }
-        public void CompleteQuest(Entity entity)
-        {
-            if (Requirement.Equals(true))
+        public virtual void CompleteQuest(Entity entity)
+        { 
+            var player = entity.GetComponent<PlayerComponent>().Player;
+            if (Requirement(entity) == true)
             {
-                entity.GetComponent<PlayerComponent>().Player.AddItem(Reward);
+                player.AddItem(Reward);
             }
         }
     }

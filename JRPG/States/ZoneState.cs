@@ -41,7 +41,7 @@ namespace JRPG.States
             var pos = _player.Position;
             if (key.Key == ConsoleKey.Escape)
             {
-                Program.Engine.PushState(new MainMenuState(_player.GetComponent<PlayerComponent>().Player));
+                Program.Engine.PushState(new MainMenuState(_player));
             }
             else if (key.Key == ConsoleKey.W)
             {
