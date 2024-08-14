@@ -111,7 +111,7 @@ namespace JRPG.Models
         {
             if (!_quests.Contains(questLine))
             {
-                _quests.Add(questLine); 
+                _quests.Add(questLine);
             }
         }
         public void CompleteQuest(IQuestLine questLine)

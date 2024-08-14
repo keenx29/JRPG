@@ -13,6 +13,7 @@ namespace JRPG
         public static Engine Engine { get; private set; }
         static void Main()
         {
+            var combatChannel = new CombatChannel();
             var random = new Random();
             const int ZoneWidth = 50;
             const int ZoneHeight = 30;
@@ -37,7 +38,7 @@ namespace JRPG
 
             var tallGrass = new Entity();
             tallGrass.AddComponent(new SpriteComponent { Sprite = '#' });
-            tallGrass.AddComponent(new CombatComponent(() => new Combat(playerModel, new BasicMob())));
+            tallGrass.AddComponent(new CombatComponent(() => new Combat(playerModel, new BasicMob(), combatChannel)));
             tallGrass.Position = new Vector3(6, 1, 0);
             //for (int i = 0; i < ZoneWidth; i++)
             //{
@@ -134,32 +135,85 @@ namespace JRPG
             //npc3.AddComponent(new SpriteComponent { Sprite = '|' });
             
             var npc3 = new Entity();
+
             npc3.Position = new Vector3(8, 1, 0);
+
             var questLine = new QuestLine("War is upon us.");
+
             var questReward = new Weapon("Defender", 20, 10);
+
             var quest = new DeliveryQuest("Inform the villagers!",
                 "An army is marching towards us...",
-                10,requirement: (e) => true, questReward);
+                10, questReward);
             questLine.AddQuest(quest);
-            var questDialogScreen = new DialogScreen(quest.Title, (quest.Description + "\nPlease take this information to everyone"),
-                (e) => {
+
+            var acceptQuestDialogScreen = new DialogScreen($"Good luck {player.GetComponent<SpriteComponent>().Sprite}!",
+                "Thank you for your assistance.",
+                (e) =>
+                {
                     var player = e.GetComponent<PlayerComponent>().Player;
                     player.StartQuestLine(questLine);
-                    },isFinalScreen: true);
-            var questDialog = new Dialog(questDialogScreen);
-            npc3.AddComponent(new DialogComponent(questDialog));
-            npc3.AddComponent(new SpriteComponent { Sprite = '|' });
-            
-            var npc4 = new Entity();
-            npc4.Position = new Vector3(10, 1, 0);
-            var questDialogScreen2 = new DialogScreen(quest.Title, ("Thank you so for bringing this to us!"), (e) =>
+                }, isFinalScreen: true);
+
+            var denyQuestDialogScreen = new DialogScreen($"Good luck on your journey {player.GetComponent<SpriteComponent>().Sprite}!",
+                "Come back when you're ready.",
+                isFinalScreen: true);
+
+            var optionalDialogScreen = new Dictionary<string, IDialogScreen>
             {
-                quest.CompleteQuest(e);
-                playerModel.CompleteQuest(questLine);
-            }, isFinalScreen: true);
-            var questDialog2 = new Dialog(questDialogScreen2);
-            npc4.AddComponent(new DialogComponent(questDialog2));
-            npc4.AddComponent(new SpriteComponent { Sprite = 'D' });
+                { "Accept!", acceptQuestDialogScreen },
+                { "Deny!", denyQuestDialogScreen }
+            };
+
+            var questDialogScreen = new DialogScreen(quest.Title, (quest.Description + "\nPlease take this information to everyone"),
+                optionalScreens: optionalDialogScreen);
+
+            var questDialog = new Dialog(questDialogScreen);
+
+            npc3.AddComponent(new DialogComponent(questDialog));
+
+            npc3.AddComponent(new SpriteComponent { Sprite = '|' });
+
+            
+            //var npc4 = new Entity();
+            //npc4.Position = new Vector3(10, 1, 0);
+            //var questDialogScreen2 = new DialogScreen(quest.Title, ("Thank you so for bringing this to us!"), (e) =>
+            //{
+            //    quest.CompleteQuest(e);
+            //    playerModel.CompleteQuest(questLine);
+            //}, isFinalScreen: true);
+            //var questDialog2 = new Dialog(questDialogScreen2);
+            //npc4.AddComponent(new DialogComponent(questDialog2));
+            //npc4.AddComponent(new SpriteComponent { Sprite = 'D' });
+
+            var npc5 = new Entity();
+            npc5.Position = new Vector3(4, 2, 0);
+            var questLine2 = new QuestLine("This is only the beginning");
+            var quest2Reward = new Consumable("Potion of Healing", 5, health: 25);
+            var quest2 = new KillQuest("Help the soldiers!", "Kill 3 enemies",new BasicMob(),3,50,quest2Reward,combatChannel);
+            var quest3 = new DeliveryQuest("Help the soldiers!","Take these healing potions and bring them to the forest",10,quest2Reward);
+            questLine2.AddQuest(quest2);
+
+            var acceptQuest2DialogScreen = new DialogScreen($"Good luck {player.GetComponent<SpriteComponent>().Sprite}!",
+                "Thank you for your assistance.",
+                (e) =>
+                {
+                    var player = e.GetComponent<PlayerComponent>().Player;
+                    player.StartQuestLine(questLine2);
+                }, isFinalScreen: true);
+
+            var optionalQuest2DialogScreens = new Dictionary<string, IDialogScreen>
+            {
+                { "Accept!", acceptQuest2DialogScreen },
+                { "Deny!", denyQuestDialogScreen }
+            };
+
+            var quest2DialogScreen = new DialogScreen(quest2.Title, (quest2.Description + "\nPlease help them!"),
+                optionalScreens: optionalQuest2DialogScreens);
+            var quest2Dialog = new Dialog(quest2DialogScreen);
+            npc5.AddComponent(new DialogComponent(quest2Dialog));
+            npc5.AddComponent(new SpriteComponent { Sprite = 'Q' });
+
 
             var zone1 = new Zone("Zone 1", new Vector3(ZoneWidth, ZoneHeight, ZoneDepth));
             zone1.AddEntity(player);
@@ -169,7 +223,8 @@ namespace JRPG
             zone1.AddEntity(npc1);
             zone1.AddEntity(npc2);
             zone1.AddEntity(npc3);
-            zone1.AddEntity(npc4);
+            zone1.AddEntity(npc5);
+            //zone1.AddEntity(npc4);
             
             Engine = new Engine();
             Engine.PushState(new ZoneState(player,zone1));

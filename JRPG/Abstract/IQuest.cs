@@ -5,10 +5,11 @@ namespace JRPG.Abstract
 {
     public interface IQuest
     {
+        string Title { get; }
         string Description { get; }
         int Experience { get; }
-        Func<Entity,bool> Requirement { get; }
         IItem Reward { get; }
-        string Title { get; }
+        QuestState State { get; }
+        int LevelRequirement { get; }
     }
 }

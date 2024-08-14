@@ -9,12 +9,14 @@ namespace JRPG.Models
 {
     public class Combat
     {
+        private readonly CombatChannel _combatChannel;
         private readonly List<ICombatListener> _listeners;
         public Player Player { get; private set; }
         public ICombatEntity Entity { get; private set; }
-        public Combat(Player player, ICombatEntity entity)
+        public Combat(Player player, ICombatEntity entity, CombatChannel combatChannel)
         {
             _listeners = new List<ICombatListener>();
+            _combatChannel = combatChannel;
             Player = player;
             Entity = entity;
         }
@@ -135,7 +137,9 @@ namespace JRPG.Models
 
             if (Entity.Hp <= 0)
             {
+                
                 listenersCopy.ForEach(x => x.DisplayMessage(Entity.Name + " died."));
+                _combatChannel.EnemyKilled(Entity);
                 listenersCopy.ForEach(x => x.EndCombat());
                 return;
             }
@@ -149,6 +153,7 @@ namespace JRPG.Models
             Player.TakeDamage(calculatedEnemyDamage);
             if (Player.Hp <= 0)
             {
+                _combatChannel.PlayerDiedEvent?.Invoke(Entity);
                 listenersCopy.ForEach(x => x.PlayerDied());
             }
         }
