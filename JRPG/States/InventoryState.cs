@@ -9,11 +9,13 @@ namespace JRPG.States
 {
     public class InventoryState : IEngineState
     {
+        private InventoryChannel _inventoryChannel;
         private readonly Player _player;
         private int _selectedItem;
-        public InventoryState(Player player)
+        public InventoryState(Player player, InventoryChannel inventoryChannel)
         {
             _player = player;
+            _inventoryChannel = inventoryChannel;
         }
 
         public void Activate()
@@ -33,8 +35,8 @@ namespace JRPG.States
 
         public void ProcessInput(ConsoleKeyInfo key)
         {
-            var equippedCount = _player.EquippedItems.Count();
-            var inventoryCount = _player.Inventory.Count();
+            var equippedCount = _player.Inventory.EquippedItems.Count();
+            var inventoryCount = _player.Inventory.NonEquippedItems.Count();
             var totalItemCount = equippedCount + inventoryCount;
             if (key.Key == ConsoleKey.Escape)
             {
@@ -59,8 +61,8 @@ namespace JRPG.States
             {
                 if (_selectedItem < equippedCount)
                 {
-                    var itemToUnequip = _player.EquippedItems.ElementAt(_selectedItem);
-                    _player.UnEquipItem(itemToUnequip);
+                    var itemToUnequip = _player.Inventory.EquippedItems.ElementAt(_selectedItem);
+                    _inventoryChannel.UnequipItem(itemToUnequip);
                 }else
                 {
                     var itemToEquip = _player.Inventory.ElementAt(_selectedItem - equippedCount);
@@ -93,7 +95,7 @@ namespace JRPG.States
             Console.WriteLine("-------------------------------------");
             var itemIndex = 0;
             var damageModifier = 0;
-            foreach (var item in _player.EquippedItems)
+            foreach (var item in _player.Inventory.EquippedItems)
             {
                 if (itemIndex == _selectedItem)
                 {
@@ -119,7 +121,7 @@ namespace JRPG.States
                 itemIndex++;
             }
             Console.WriteLine("-------------------------------------");
-            foreach (var item in _player.Inventory)
+            foreach (var item in _player.Inventory.NonEquippedItems)
             {
                 if (itemIndex == _selectedItem)
                 {

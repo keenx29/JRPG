@@ -69,7 +69,7 @@ namespace JRPG.Models
                 item.UseCharge();
                 if (item.Charges == 0)
                 {
-                    Player.RemoveItem(item);
+                    Player.Inventory.RemoveItem(item);
                 }
                 return;
             }

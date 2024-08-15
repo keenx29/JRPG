@@ -10,8 +10,7 @@ namespace JRPG.Models
     public class Player
     {
         //TODO: Armor slot system
-        private readonly List<IEquippableItem> _equippedItems;
-        private readonly List<IItem> _inventory;
+        
         private readonly List<IAbility> _abilities;
         private readonly List<IQuestLine> _activeQuestLines;
         private readonly List<IQuestLine> _completedQuestLines;
@@ -19,6 +18,9 @@ namespace JRPG.Models
 
         public IEnumerable<IEquippableItem> EquippedItems { get { return _equippedItems; } }
         public IEnumerable<IItem> Inventory { get { return _inventory; } }
+        private readonly List<IQuestLine> _quests;
+        public Inventory Inventory { get; private set; }
+        
         public IEnumerable<IAbility> Abilities { get { return _abilities; } }
         public IEnumerable<IQuestLine> ActiveQuestLines { get { return _activeQuestLines; } }
         public IEnumerable<IQuestLine> CompletedQuestLines { get { return _completedQuestLines; } }
@@ -27,8 +29,6 @@ namespace JRPG.Models
         
         public Player(QuestChannel questChannel) 
         {
-            _equippedItems = new List<IEquippableItem>();
-            _inventory = new List<IItem>();
             _abilities = new List<IAbility>();
             _activeQuestLines = new List<IQuestLine>();
             _completedQuestLines = new List<IQuestLine>();
@@ -54,49 +54,8 @@ namespace JRPG.Models
         {
             _abilities.Add(ability);
         }
-        public void AddItem (IItem item)
-        {
-            _inventory.Add(item);
-        }
-        public void RemoveItem (IItem item)
-        {
-            _inventory.Remove(item);
-        }
-        public void UpdateStats()
-        {
-            foreach (IEquippableItem item in EquippedItems)
-            {
-                if (item.Weight > 0)
-                {
-                    Stats.AttackSpeed -= item.Weight;
-                }
-                if (item.Defense > 0)
-                {
-                    Stats.Defense += item.Defense;
-                }
-                if (item.Attack > 0)
-                {
-                    Stats.AttackDamage += item.Attack;
-                }
-            }
-        }
-        public bool EquipItem (IEquippableItem item)
-        {
-            if (!_equippedItems.Any(x => string.Equals(x.Name,item.Name,StringComparison.CurrentCultureIgnoreCase)))
-            {
-                _inventory.Remove(item);
-                _equippedItems.Add(item);
-                UpdateStats();
-                return true;
-            }
-            return false;
-        }
-        public void UnEquipItem (IEquippableItem item)
-        {
-            _equippedItems.Remove(item);
-            _inventory.Add(item);
-            UpdateStats();
-        }
+        
+        
 
         
         public void SpendGold(int input)
