@@ -14,6 +14,7 @@ namespace JRPG
         static void Main()
         {
             var combatChannel = new CombatChannel();
+            var questChannel = new QuestChannel();
             var random = new Random();
             const int ZoneWidth = 50;
             const int ZoneHeight = 30;
@@ -24,7 +25,7 @@ namespace JRPG
 
             Console.CursorVisible = false;
 
-            var playerModel = new Player();
+            var playerModel = new Player(questChannel);
             playerModel.AddAbility(new Ability("Fireball", 10));
             playerModel.AddAbility(new Ability("Firestorm", 100));
             playerModel.AddItem(new Consumable("Molotov",3, damage: 25));
@@ -144,7 +145,7 @@ namespace JRPG
 
             var quest = new DeliveryQuest("Inform the villagers!",
                 "An army is marching towards us...",
-                10, questReward);
+                10, questReward,questChannel);
             questLine.AddQuest(quest);
 
             var acceptQuestDialogScreen = new DialogScreen($"Good luck {player.GetComponent<SpriteComponent>().Sprite}!",
@@ -190,16 +191,16 @@ namespace JRPG
             npc5.Position = new Vector3(4, 2, 0);
             var questLine2 = new QuestLine("This is only the beginning");
             var quest2Reward = new Consumable("Potion of Healing", 5, health: 25);
-            var quest2 = new KillQuest("Help the soldiers!", "Kill 3 enemies",new BasicMob(),3,50,quest2Reward,combatChannel);
-            var quest3 = new DeliveryQuest("Help the soldiers!","Take these healing potions and bring them to the forest",10,quest2Reward);
+            var quest2 = new KillQuest("Help the soldiers!", "Kill 3 enemies",new BasicMob(),3,50,quest2Reward,combatChannel,questChannel);
+            var quest3 = new DeliveryQuest("Help the soldiers!","Take these healing potions and bring them to the forest",10,quest2Reward, questChannel);
             questLine2.AddQuest(quest2);
 
             var acceptQuest2DialogScreen = new DialogScreen($"Good luck {player.GetComponent<SpriteComponent>().Sprite}!",
                 "Thank you for your assistance.",
                 (e) =>
                 {
-                    var player = e.GetComponent<PlayerComponent>().Player;
-                    player.StartQuestLine(questLine2);
+                    playerModel.StartQuestLine(questLine2);
+                    questLine2.Start();
                 }, isFinalScreen: true);
 
             var optionalQuest2DialogScreens = new Dictionary<string, IDialogScreen>

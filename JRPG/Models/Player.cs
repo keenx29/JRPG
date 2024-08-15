@@ -13,26 +13,46 @@ namespace JRPG.Models
         private readonly List<IEquippableItem> _equippedItems;
         private readonly List<IItem> _inventory;
         private readonly List<IAbility> _abilities;
-        private readonly List<IQuestLine> _quests;
+        private readonly List<IQuestLine> _activeQuestLines;
+        private readonly List<IQuestLine> _completedQuestLines;
+        private readonly QuestChannel _questChannel;
+
         public IEnumerable<IEquippableItem> EquippedItems { get { return _equippedItems; } }
         public IEnumerable<IItem> Inventory { get { return _inventory; } }
         public IEnumerable<IAbility> Abilities { get { return _abilities; } }
-        public IEnumerable<IQuestLine> Quests { get { return _quests; } }
+        public IEnumerable<IQuestLine> ActiveQuestLines { get { return _activeQuestLines; } }
+        public IEnumerable<IQuestLine> CompletedQuestLines { get { return _completedQuestLines; } }
         public int Hp { get; private set; }
         public int Gold { get; private set; }
         public int AttackSpeed { get; private set; }
         public int AttackDamage { get; private set; }
         public int Defense { get; private set; }
         public int DamageBuff { get; private set; } 
-        public Player() 
+        public Player(QuestChannel questChannel) 
         {
             _equippedItems = new List<IEquippableItem>();
             _inventory = new List<IItem>();
             _abilities = new List<IAbility>();
-            _quests = new List<IQuestLine>();
+            _activeQuestLines = new List<IQuestLine>();
+            _completedQuestLines = new List<IQuestLine>();
+            _questChannel = questChannel;
+            _questChannel.QuestCompleteEvent += OnQuestCompleted;
+            _questChannel.QuestActivatedEvent += OnQuestActivated;
             Hp = 200;
             Gold = 1000;
             AttackSpeed = 10;
+        }
+        private void OnQuestCompleted(IQuest quest)
+        {
+            CompleteQuest(quest);
+        }
+        private void OnQuestActivated(IQuest quest)
+        {
+            var questLine = _activeQuestLines.FirstOrDefault(qLine => qLine.Contains(quest));
+            if (questLine != null)
+            {
+                StartQuestLine(questLine);
+            }
         }
         public void AddAbility(IAbility ability)
         {
@@ -109,18 +129,27 @@ namespace JRPG.Models
         }
         public void StartQuestLine(IQuestLine questLine)
         {
-            if (!_quests.Contains(questLine))
+            //if (!_quests.Contains(questLine))
+            //{
+            //    _quests.Add(questLine);
+            //}
+            if (!_activeQuestLines.Contains(questLine))
             {
-                _quests.Add(questLine);
+                _activeQuestLines.Add(questLine);
             }
+            questLine.Start();
         }
-        public void CompleteQuest(IQuestLine questLine)
+        public void CompleteQuest(IQuest quest)
         {
-            foreach (var qLine in _quests)
+            var questLine = _activeQuestLines.FirstOrDefault(qLine => qLine.Contains(quest));
+            if (questLine != null)
             {
-                if (qLine == questLine)
+                questLine.CompleteQuest(quest);
+
+                if (questLine.IsCompleted)
                 {
-                    qLine.RemoveQuest();
+                    _activeQuestLines.Remove(questLine);
+                    _completedQuestLines.Add(questLine);
                 }
             }
         }

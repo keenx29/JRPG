@@ -16,14 +16,30 @@ namespace JRPG.Models
         public QuestState State { get; private set; }
         public int LevelRequirement { get; } //TODO: Level requirement on quests
 
-        public Quest(string title, string description, int experience, IItem reward, QuestState state)
+        public Quest(string title, string description, int experience, IItem reward, QuestState state,QuestChannel questChannel)
         {
             Title = title;
             Description = description;
             Experience = experience;
             Reward = reward;
             State = state;
-            _questsChannel = new QuestChannel();
+            _questsChannel = questChannel;
+        }
+        public void ActivateQuest()
+        {
+            if (State == QuestState.Pending)
+            {
+                State = QuestState.Active;
+                Enable();
+            }
+        }
+        public void DeactivateQuest()
+        {
+            if (State == QuestState.Active)
+            {
+                State = QuestState.Pending;
+                Disable();
+            }
         }
         protected virtual void Enable()
         {
@@ -65,6 +81,7 @@ namespace JRPG.Models
 
         protected void Complete()
         {
+            State = QuestState.Completed;
             _questsChannel.CompleteQuest(this);
         }
         //public virtual void CompleteQuest(Entity entity)

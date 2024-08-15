@@ -44,9 +44,9 @@ namespace JRPG.States
             Console.WriteLine("Quest Log");
             Console.WriteLine("-------------------------------------");
             var questIndex = 0;
-            foreach (var questLine in _player.GetComponent<PlayerComponent>().Player.Quests)
+            foreach (var questLine in _player.GetComponent<PlayerComponent>().Player.ActiveQuestLines)
             {
-                foreach (var quest in questLine.Quests)
+                foreach (var quest in questLine.RemainingQuests)
                 {
                     if (questIndex == _selectedQuest)
                     {

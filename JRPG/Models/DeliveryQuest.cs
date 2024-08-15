@@ -7,7 +7,7 @@ namespace JRPG.Models
 {
     public class DeliveryQuest : Quest
     {
-        public DeliveryQuest(string title, string description, int experience, IItem reward, QuestState state = QuestState.Completed) : base(title, description, experience, reward, state)
+        public DeliveryQuest(string title, string description, int experience, IItem reward, QuestChannel questChannel, QuestState state = QuestState.Completed) : base(title, description, experience, reward, state, questChannel)
         {
 
         }

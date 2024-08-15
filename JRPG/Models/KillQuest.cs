@@ -11,7 +11,7 @@ namespace JRPG.Models
         private ICombatEntity _enemyToDefeat;
         public int NumberOfEnemiesToDestroy { get; }
         public int EnemiesDefeated { get; private set; }
-        public KillQuest(string title, string description,ICombatEntity enemyToDefeat,int numberOfEnemiesToDestroy, int experience, IItem reward,CombatChannel combatChannel,QuestState state = QuestState.Active) : base(title, description, experience, reward, state)
+        public KillQuest(string title, string description,ICombatEntity enemyToDefeat,int numberOfEnemiesToDestroy, int experience, IItem reward,CombatChannel combatChannel,QuestChannel questChannel,QuestState state = QuestState.Pending) : base(title, description, experience, reward, state, questChannel)
         {
             _combatChannel = combatChannel;
             NumberOfEnemiesToDestroy = numberOfEnemiesToDestroy;
