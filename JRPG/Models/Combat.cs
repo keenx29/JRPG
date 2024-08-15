@@ -69,7 +69,7 @@ namespace JRPG.Models
                 item.UseCharge();
                 if (item.Charges == 0)
                 {
-                    Player.Inventory.RemoveItem(item);
+                    Player.RemoveItem(item);
                 }
                 return;
             }
@@ -93,11 +93,7 @@ namespace JRPG.Models
             var healingAmount = item.GetAmount();
             var listenersCopy = new List<ICombatListener>(_listeners);
             listenersCopy.ForEach(x => x.DisplayMessage("Player healed for " + healingAmount + " hp from " + item.Name));
-<<<<<<< HEAD
             Player.Stats.Heal(healingAmount);
-=======
-            Player.Heal(healingAmount);
->>>>>>> 8fb4a8d (Fixed healing and damage bonus potion bugs)
             DamagePlayer();
         }
         private void BuffPlayer(IUsableItem item)
@@ -105,11 +101,7 @@ namespace JRPG.Models
             var buffAmount = item.GetAmount();
             var listenersCopy = new List<ICombatListener>(_listeners);
             listenersCopy.ForEach(x => x.DisplayMessage("Player buffed for " + buffAmount + " damage from " + item.Name));
-<<<<<<< HEAD
             Player.Stats.Buff(buffAmount);
-=======
-            Player.Buff(buffAmount);
->>>>>>> 8fb4a8d (Fixed healing and damage bonus potion bugs)
             DamagePlayer();
         }
         private void PerformActionOnPlayer(Damage damage)

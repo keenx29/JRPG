@@ -12,10 +12,11 @@ namespace JRPG.Abstract
         private readonly List<IEquippableItem> _equippedItems;
         public IEnumerable<IItem> NonEquippedItems { get { return _inventory; } }
         public IEnumerable<IEquippableItem> EquippedItems { get { return _equippedItems; } }
-        public Inventory()
+        public Inventory(InventoryChannel inventoryChannel)
         {
             _inventory = new List<IItem>();
             _equippedItems = new List<IEquippableItem>();
+            _inventoryChannel = inventoryChannel;
         }
         public void Enable()
         {
@@ -53,6 +54,10 @@ namespace JRPG.Abstract
         }
 
         private void ItemAdded(IItem item)
+        {
+            _inventory.Add(item);
+        }
+        private void ItemRemoved(IItem item)
         {
             _inventory.Add(item);
         }

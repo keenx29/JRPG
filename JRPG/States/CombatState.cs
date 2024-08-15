@@ -29,7 +29,7 @@ namespace JRPG.States
         }
         private void Render()
         {
-            var optionCount = _combat.Player.Abilities.Count() + _combat.Player.Inventory.Where(x => x is IUsableItem).Count();
+            var optionCount = _combat.Player.Abilities.Count() + _combat.Player.Inventory.NonEquippedItems.Where(x => x is IUsableItem).Count();
             //Corrects the _selectedOption index when an item with only 1 charge is used an removed from the Inventory of the player
             if (_selectedOption > optionCount)
             {
@@ -52,7 +52,7 @@ namespace JRPG.States
             }
             Console.WriteLine("--------------------------------------");
             Console.WriteLine("Items:");
-            foreach (IUsableItem item in _combat.Player.Inventory.Where(x => x is IUsableItem))
+            foreach (IUsableItem item in _combat.Player.Inventory.NonEquippedItems.Where(x => x is IUsableItem))
             {
                 var itemDamage = item.GetDamage();
                 var effect = item.GetEffect();
@@ -111,7 +111,7 @@ namespace JRPG.States
         public void ProcessInput(ConsoleKeyInfo key)
         {
             var abilityCount = _combat.Player.Abilities.Count();
-            var itemCount = _combat.Player.Inventory.Where(x => x is IUsableItem).Count();
+            var itemCount = _combat.Player.Inventory.NonEquippedItems.Where(x => x is IUsableItem).Count();
             var totalCount = abilityCount + itemCount;
             if (key.Key == ConsoleKey.W)
             {
@@ -135,7 +135,7 @@ namespace JRPG.States
                 }
                 else if (_selectedOption > abilityCount - 1 && _selectedOption < totalCount)
                 {
-                    _combat.UseItem(_combat.Player.Inventory.Where(x => x is IUsableItem).ElementAt(_selectedOption - abilityCount) as IUsableItem);
+                    _combat.UseItem(_combat.Player.Inventory.NonEquippedItems.Where(x => x is IUsableItem).ElementAt(_selectedOption - abilityCount) as IUsableItem);
                 }
                 else
                 {

@@ -15,6 +15,7 @@ namespace JRPG
         {
             var combatChannel = new CombatChannel();
             var questChannel = new QuestChannel();
+            var inventoryChannel = new InventoryChannel();
             var random = new Random();
             const int ZoneWidth = 50;
             const int ZoneHeight = 30;
@@ -28,8 +29,8 @@ namespace JRPG
             var playerModel = new Player(questChannel);
             playerModel.AddAbility(new Ability("Fireball", 10));
             playerModel.AddAbility(new Ability("Firestorm", 100));
-            playerModel.AddItem(new Consumable("Molotov",3, damage: 25));
-            playerModel.AddItem(new Consumable("Bow",10, damage: 10));
+            inventoryChannel.AddItem(new Consumable("Molotov",3, damage: 25));
+            inventoryChannel.AddItem(new Consumable("Bow",10, damage: 10));
 
             var player = new Entity();
             player.AddComponent(new SpriteComponent { Sprite = 'u' });
@@ -40,6 +41,7 @@ namespace JRPG
             var tallGrass = new Entity();
             tallGrass.AddComponent(new SpriteComponent { Sprite = '#' });
             tallGrass.AddComponent(new CombatComponent(() => new Combat(playerModel, new BasicMob(), combatChannel)));
+            tallGrass.AddComponent(new CombatComponent(() => new Combat(playerModel, new BasicMob(),inventoryChannel)));
             tallGrass.Position = new Vector3(6, 1, 0);
             //for (int i = 0; i < ZoneWidth; i++)
             //{
@@ -113,7 +115,7 @@ namespace JRPG
             trader.AddItem(new Consumable("Potion of Healing",3,health: 25));
             trader.AddItem(new Consumable("Potion of Protection", 1, armor: 10));
             trader.AddItem(new Consumable("Potion of Rage", 5,damageBuff: 50));
-            npc2.AddComponent(new BarterComponent(() => new Barter(playerModel, trader)));
+            npc2.AddComponent(new BarterComponent(() => new Barter(playerModel, trader, inventoryChannel)));
             npc2.AddComponent(new SpriteComponent { Sprite = '?' });
 
 

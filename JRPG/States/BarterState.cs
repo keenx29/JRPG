@@ -83,7 +83,7 @@ namespace JRPG.States
             }
             Console.WriteLine("--------------------------------------");
             Console.WriteLine("Inventory:");
-            foreach (var item in _barter.Player.Inventory)
+            foreach (var item in _barter.Player.Inventory.NonEquippedItems)
             {
                 var equippableItem = item as IEquippableItem;
                 var usableItem = item as IUsableItem;
@@ -145,7 +145,7 @@ namespace JRPG.States
         }
         public void Activate()
         {
-            var itemList = _barter.Player.Inventory.Concat(_barter.Entity.Inventory).ToList();
+            var itemList = _barter.Player.Inventory.NonEquippedItems.Concat(_barter.Entity.Inventory).ToList();
             _barter.Entity.GeneratePrices(itemList);
             Render();
         }
@@ -168,7 +168,7 @@ namespace JRPG.States
                 return;
             }
             var traderItemCount = _barter.Entity.Inventory.Count();
-            var playerItemCount = _barter.Player.Inventory.Count();
+            var playerItemCount = _barter.Player.Inventory.NonEquippedItems.Count();
             var totalCount = traderItemCount + playerItemCount;
             if (key.Key == ConsoleKey.W)
             {
@@ -193,7 +193,7 @@ namespace JRPG.States
                 }
                 else if (_selectedOption > traderItemCount - 1)
                 {
-                    _barter.SellItem(_barter.Player.Inventory.ElementAt(_selectedOption - traderItemCount));
+                    _barter.SellItem(_barter.Player.Inventory.NonEquippedItems.ElementAt(_selectedOption - traderItemCount));
                     //_combat.UseItem(_combat.Player.Inventory.Where(x => x.CanUse).ElementAt(_selectedOption - abilityCount));
                 }
             }

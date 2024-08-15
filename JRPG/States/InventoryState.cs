@@ -65,15 +65,15 @@ namespace JRPG.States
                     _inventoryChannel.UnequipItem(itemToUnequip);
                 }else
                 {
-                    var itemToEquip = _player.Inventory.ElementAt(_selectedItem - equippedCount);
+                    var itemToEquip = _player.Inventory.NonEquippedItems.ElementAt(_selectedItem - equippedCount);
                     if (itemToEquip is IEquippableItem)
                     {
-                        if (!_player.EquipItem(itemToEquip as IEquippableItem))
+                        if (_player.Inventory.EquippedItems.Any(x => string.Equals(x.Name, itemToEquip.Name, StringComparison.CurrentCultureIgnoreCase)))
                         {
                             Render($"{itemToEquip.Name} is already equipped!");
                             return;
                         }
-
+                        _inventoryChannel.EquipItem(itemToEquip as IEquippableItem);
                     }
                     else
                     {
