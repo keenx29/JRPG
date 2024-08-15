@@ -78,7 +78,7 @@ namespace JRPG.Models
         {
             if (Damage > 0)
             {
-                var updatedDamage = Damage - entity.Defense + player.DamageBuff;
+                var updatedDamage = Damage - entity.Defense + player.Stats.DamageBuff;
                 return new Damage(Name, updatedDamage);
             }
             return new Damage(Name, 0);

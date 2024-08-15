@@ -85,7 +85,7 @@ namespace JRPG.Models
             var rawAbilityDamage = ability.GetDamage();
             var calculatedAbilityDamage = new Damage
                 (rawAbilityDamage.Text,
-                rawAbilityDamage.Amount + (Player.AttackDamage / 2) + Player.DamageBuff - (Entity.Defense / 2));
+                rawAbilityDamage.Amount + (Player.Stats.AttackDamage / 2) + Player.Stats.DamageBuff - (Entity.Defense / 2));
             PerformAction(calculatedAbilityDamage);
         }
         private void HealPlayer(IUsableItem item)
@@ -93,7 +93,7 @@ namespace JRPG.Models
             var healingAmount = item.GetAmount();
             var listenersCopy = new List<ICombatListener>(_listeners);
             listenersCopy.ForEach(x => x.DisplayMessage("Player healed for " + healingAmount + " hp from " + item.Name));
-            Player.Heal(healingAmount);
+            Player.Stats.Heal(healingAmount);
             DamagePlayer();
         }
         private void BuffPlayer(IUsableItem item)
@@ -101,7 +101,7 @@ namespace JRPG.Models
             var buffAmount = item.GetAmount();
             var listenersCopy = new List<ICombatListener>(_listeners);
             listenersCopy.ForEach(x => x.DisplayMessage("Player buffed for " + buffAmount + " damage from " + item.Name));
-            Player.Buff(buffAmount);
+            Player.Stats.Buff(buffAmount);
             DamagePlayer();
         }
         private void PerformActionOnPlayer(Damage damage)
@@ -109,15 +109,15 @@ namespace JRPG.Models
             var listenersCopy = new List<ICombatListener>(_listeners);
             damage = Entity.GetDamage(Player);
             listenersCopy.ForEach(x => x.DisplayMessage("Player took " + damage.Amount + " damage from " + damage.Text));
-            Player.TakeDamage(damage);
-            if (Player.Hp <= 0)
+            Player.Stats.TakeDamage(damage);
+            if (Player.Stats.Hp <= 0)
             {
                 listenersCopy.ForEach(x => x.PlayerDied());
             }
         }
         private void PerformAction (Damage damage)
         {
-            if (Player.AttackSpeed >= Entity.AttackSpeed)
+            if (Player.Stats.AttackSpeed >= Entity.AttackSpeed)
             {
                 DamageEnemy(damage);
                 DamagePlayer();
@@ -148,10 +148,10 @@ namespace JRPG.Models
         {
             var listenersCopy = new List<ICombatListener>(_listeners);
             var rawEnemyDamage = Entity.GetDamage(Player);
-            var calculatedEnemyDamage = new Damage(rawEnemyDamage.Text, rawEnemyDamage.Amount - (Player.Defense / 2));
+            var calculatedEnemyDamage = new Damage(rawEnemyDamage.Text, rawEnemyDamage.Amount - (Player.Stats.Defense / 2));
             listenersCopy.ForEach(x => x.DisplayMessage("Player took " + calculatedEnemyDamage.Amount + " damage from " + calculatedEnemyDamage.Text));
-            Player.TakeDamage(calculatedEnemyDamage);
-            if (Player.Hp <= 0)
+            Player.Stats.TakeDamage(calculatedEnemyDamage);
+            if (Player.Stats.Hp <= 0)
             {
                 _combatChannel.PlayerDiedEvent?.Invoke(Entity);
                 listenersCopy.ForEach(x => x.PlayerDied());

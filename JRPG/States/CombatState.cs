@@ -24,7 +24,7 @@ namespace JRPG.States
         private void RenderHeader()
         {
             Console.Clear();
-            Console.WriteLine("You (hp: {0}) vs {1} (hp: {2})", _combat.Player.Hp, _combat.Entity.Name, _combat.Entity.Hp);
+            Console.WriteLine("You (hp: {0}) vs {1} (hp: {2})", _combat.Player.Stats.Hp, _combat.Entity.Name, _combat.Entity.Hp);
             Console.WriteLine("--------------------------------------");
         }
         private void Render()
@@ -46,7 +46,7 @@ namespace JRPG.States
                 {
                     ColorConsole(true);
                 }
-                Console.WriteLine($"{ability.Name} - {abilityDamage + _combat.Player.DamageBuff} Damage");
+                Console.WriteLine($"{ability.Name} - {abilityDamage + _combat.Player.Stats.DamageBuff} Damage");
                 index++;
                 ColorConsole(false);
             }
@@ -97,7 +97,7 @@ namespace JRPG.States
         public void EndCombat()
         {
             _combatEnded = true;
-            _combat.Player.ResetBuff();
+            _combat.Player.Stats.ResetBuff();
             Program.Engine.PopState(this);
         }
 

@@ -22,12 +22,9 @@ namespace JRPG.Models
         public IEnumerable<IAbility> Abilities { get { return _abilities; } }
         public IEnumerable<IQuestLine> ActiveQuestLines { get { return _activeQuestLines; } }
         public IEnumerable<IQuestLine> CompletedQuestLines { get { return _completedQuestLines; } }
-        public int Hp { get; private set; }
+        public PlayerStats Stats { get; private set; }
         public int Gold { get; private set; }
-        public int AttackSpeed { get; private set; }
-        public int AttackDamage { get; private set; }
-        public int Defense { get; private set; }
-        public int DamageBuff { get; private set; } 
+        
         public Player(QuestChannel questChannel) 
         {
             _equippedItems = new List<IEquippableItem>();
@@ -38,9 +35,8 @@ namespace JRPG.Models
             _questChannel = questChannel;
             _questChannel.QuestCompleteEvent += OnQuestCompleted;
             _questChannel.QuestActivatedEvent += OnQuestActivated;
-            Hp = 200;
             Gold = 1000;
-            AttackSpeed = 10;
+            Stats = new PlayerStats(200, _questChannel, attackSpeed: 10);
         }
         private void OnQuestCompleted(IQuest quest)
         {
@@ -66,6 +62,24 @@ namespace JRPG.Models
         {
             _inventory.Remove(item);
         }
+        public void UpdateStats()
+        {
+            foreach (IEquippableItem item in EquippedItems)
+            {
+                if (item.Weight > 0)
+                {
+                    Stats.AttackSpeed -= item.Weight;
+                }
+                if (item.Defense > 0)
+                {
+                    Stats.Defense += item.Defense;
+                }
+                if (item.Attack > 0)
+                {
+                    Stats.AttackDamage += item.Attack;
+                }
+            }
+        }
         public bool EquipItem (IEquippableItem item)
         {
             if (!_equippedItems.Any(x => string.Equals(x.Name,item.Name,StringComparison.CurrentCultureIgnoreCase)))
@@ -84,11 +98,7 @@ namespace JRPG.Models
             UpdateStats();
         }
 
-        public void TakeDamage(Damage damage)
-        {
-            Hp -= damage.Amount;
-            // damage = _equippedItems.Aggregate(damage, (a, i) => i.ModifyDamage(a));
-        }
+        
         public void SpendGold(int input)
         {
             Gold -= input;
@@ -97,36 +107,8 @@ namespace JRPG.Models
         {
             Gold += input;
         }
-        public void UpdateStats()
-        {
-            foreach(IEquippableItem item in EquippedItems)
-            {
-                if (item.Weight > 0)
-                {
-                    AttackSpeed -= item.Weight;
-                }
-                if (item.Defense > 0)
-                {
-                    Defense += item.Defense;
-                }
-                if (item.Attack > 0)
-                {
-                    AttackDamage += item.Attack;
-                }
-            }
-        }
-        public void Heal(int amount)
-        {
-            Hp += amount;
-        }
-        public void Buff(int amount)
-        {
-            DamageBuff += amount;
-        }
-        public void ResetBuff()
-        {
-            DamageBuff = 0;
-        }
+        
+        
         public void StartQuestLine(IQuestLine questLine)
         {
             //if (!_quests.Contains(questLine))
