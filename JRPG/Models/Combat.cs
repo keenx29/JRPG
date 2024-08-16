@@ -10,13 +10,15 @@ namespace JRPG.Models
     public class Combat
     {
         private readonly CombatChannel _combatChannel;
+        private readonly InventoryChannel _inventoryChannel;
         private readonly List<ICombatListener> _listeners;
         public Player Player { get; private set; }
         public ICombatEntity Entity { get; private set; }
-        public Combat(Player player, ICombatEntity entity, CombatChannel combatChannel)
+        public Combat(Player player, ICombatEntity entity, CombatChannel combatChannel,InventoryChannel inventoryChannel)
         {
             _listeners = new List<ICombatListener>();
             _combatChannel = combatChannel;
+            _inventoryChannel = inventoryChannel;
             Player = player;
             Entity = entity;
         }
@@ -69,7 +71,7 @@ namespace JRPG.Models
                 item.UseCharge();
                 if (item.Charges == 0)
                 {
-                    Player.RemoveItem(item);
+                    _inventoryChannel.RemoveItem(item);
                 }
                 return;
             }

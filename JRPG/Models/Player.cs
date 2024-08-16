@@ -16,9 +16,6 @@ namespace JRPG.Models
         private readonly List<IQuestLine> _completedQuestLines;
         private readonly QuestChannel _questChannel;
 
-        public IEnumerable<IEquippableItem> EquippedItems { get { return _equippedItems; } }
-        public IEnumerable<IItem> Inventory { get { return _inventory; } }
-        private readonly List<IQuestLine> _quests;
         public Inventory Inventory { get; private set; }
         
         public IEnumerable<IAbility> Abilities { get { return _abilities; } }
@@ -27,9 +24,11 @@ namespace JRPG.Models
         public PlayerStats Stats { get; private set; }
         public int Gold { get; private set; }
         
-        public Player(QuestChannel questChannel) 
+        public Player(QuestChannel questChannel,InventoryChannel inventoryChannel) 
         {
             _abilities = new List<IAbility>();
+            Inventory = new Inventory(inventoryChannel);
+            Inventory.Enable();
             _activeQuestLines = new List<IQuestLine>();
             _completedQuestLines = new List<IQuestLine>();
             _questChannel = questChannel;
@@ -92,13 +91,6 @@ namespace JRPG.Models
                     _activeQuestLines.Remove(questLine);
                     _completedQuestLines.Add(questLine);
                 }
-            }
-        }
-        public void StartQuestLine(IQuestLine questLine)
-        {
-            if (!_quests.Contains(questLine))
-            {
-                _quests.Add(questLine); 
             }
         }
     }

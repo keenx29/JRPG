@@ -8,7 +8,6 @@ namespace JRPG.Abstract
         string Title { get; }
         string Description { get; }
         int Experience { get; }
-        IItem Requirement { get; }
         IItem Reward { get; }
         QuestState State { get; }
         int LevelRequirement { get; }

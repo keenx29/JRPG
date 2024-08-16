@@ -26,7 +26,7 @@ namespace JRPG
 
             Console.CursorVisible = false;
 
-            var playerModel = new Player(questChannel);
+            var playerModel = new Player(questChannel,inventoryChannel);
             playerModel.AddAbility(new Ability("Fireball", 10));
             playerModel.AddAbility(new Ability("Firestorm", 100));
             inventoryChannel.AddItem(new Consumable("Molotov",3, damage: 25));
@@ -40,8 +40,7 @@ namespace JRPG
 
             var tallGrass = new Entity();
             tallGrass.AddComponent(new SpriteComponent { Sprite = '#' });
-            tallGrass.AddComponent(new CombatComponent(() => new Combat(playerModel, new BasicMob(), combatChannel)));
-            tallGrass.AddComponent(new CombatComponent(() => new Combat(playerModel, new BasicMob(),inventoryChannel)));
+            tallGrass.AddComponent(new CombatComponent(() => new Combat(playerModel, new BasicMob(), combatChannel,inventoryChannel)));
             tallGrass.Position = new Vector3(6, 1, 0);
             //for (int i = 0; i < ZoneWidth; i++)
             //{
@@ -83,7 +82,7 @@ namespace JRPG
                     "Great!",
                     new DialogScreen("I need your assistance",
                 "Bring this letter to Ivan for a Reward",
-                e => e.GetComponent<PlayerComponent>().Player.AddItem(new Item("Letter (quest item)")),
+                (e) => inventoryChannel.AddItem(new Item("Letter (quest item)")),
                 isFinalScreen: true)
                 },
                 {
@@ -230,7 +229,7 @@ namespace JRPG
             //zone1.AddEntity(npc4);
             
             Engine = new Engine();
-            Engine.PushState(new ZoneState(player,zone1));
+            Engine.PushState(new ZoneState(player,zone1,inventoryChannel));
             
             while (Engine.IsRunning)
             {

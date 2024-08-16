@@ -21,12 +21,14 @@ namespace JRPG.Abstract
         public void Enable()
         {
             _inventoryChannel.ItemAddedEvent += ItemAdded;
+            _inventoryChannel.ItemRemovedEvent += ItemRemoved;
             _inventoryChannel.ItemEquippedEvent += ItemEquipped;
             _inventoryChannel.ItemUnequippedEvent += ItemUnequipped;
         }
         public void Disable()
         {
             _inventoryChannel.ItemAddedEvent -= ItemAdded;
+            _inventoryChannel.ItemRemovedEvent -= ItemRemoved;
             _inventoryChannel.ItemEquippedEvent -= ItemEquipped;
             _inventoryChannel.ItemUnequippedEvent -= ItemUnequipped;
         }

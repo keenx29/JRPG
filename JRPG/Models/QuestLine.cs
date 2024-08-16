@@ -19,7 +19,6 @@ namespace JRPG.Models
 
         public QuestLine(string name)
         {
-            Quests = new Queue<IQuest>();
             Name = name;
             _remainingQuests = new Queue<IQuest>();
             _completedQuests = new List<IQuest>();

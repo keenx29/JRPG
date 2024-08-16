@@ -36,7 +36,7 @@ namespace JRPG.States
             {
                 Program.Engine.PopState(this);
                 return;
-        }
+            }
         }
         private void Render()
         {

@@ -10,9 +10,11 @@ namespace JRPG.States
     class MainMenuState : IEngineState
     {
         private readonly Entity _player;
-        public MainMenuState(Entity player)
+        private readonly InventoryChannel _inventoryChannel;
+        public MainMenuState(Entity player,InventoryChannel inventoryChannel)
         {
             _player = player;
+            _inventoryChannel = inventoryChannel;
         }
 
         public void Activate()
@@ -42,11 +44,7 @@ namespace JRPG.States
             }
             if (key.Key == ConsoleKey.Enter)
             {
-                Program.Engine.PushState(new InventoryState(_player.GetComponent<PlayerComponent>().Player));
-            }
-            if (key.Key == ConsoleKey.L)
-            {
-                Program.Engine.PushState(new QuestLogState(_player));
+                Program.Engine.PushState(new InventoryState(_player.GetComponent<PlayerComponent>().Player, _inventoryChannel));
             }
             if (key.Key == ConsoleKey.L)
             {

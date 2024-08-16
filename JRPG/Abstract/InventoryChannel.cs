@@ -18,11 +18,11 @@ namespace JRPG.Abstract
         {
             ItemRemovedEvent?.Invoke(item);
         }
-        public void EquipItem (IEquippableItem item)
+        public void EquipItem(IEquippableItem item)
         {
             ItemEquippedEvent?.Invoke(item);
         }
-        public void UnequipItem (IEquippableItem item)
+        public void UnequipItem(IEquippableItem item)
         {
             ItemUnequippedEvent?.Invoke(item);
         }

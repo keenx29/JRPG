@@ -12,13 +12,15 @@ namespace JRPG.States
         private readonly Entity _player;
         private readonly Zone _zone;
         private readonly ZoneRenderer _renderer;
+        private readonly InventoryChannel _inventoryChannel;
         
-        public ZoneState(Entity player,Zone zone)
+        public ZoneState(Entity player,Zone zone, InventoryChannel inventoryChannel)
         {
             _player = player;
             _zone = zone;
             _renderer = new ZoneRenderer(zone);
             _zone.AddListener(_renderer);
+            _inventoryChannel = inventoryChannel;
         }
         public void Activate()
         {
@@ -41,7 +43,7 @@ namespace JRPG.States
             var pos = _player.Position;
             if (key.Key == ConsoleKey.Escape)
             {
-                Program.Engine.PushState(new MainMenuState(_player));
+                Program.Engine.PushState(new MainMenuState(_player, _inventoryChannel));
             }
             else if (key.Key == ConsoleKey.W)
             {

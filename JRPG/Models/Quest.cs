@@ -12,7 +12,6 @@ namespace JRPG.Models
         public string Title { get; private set; }
         public string Description { get; private set; }
         public int Experience { get; private set; }
-        public IItem Requirement { get; private set; }
         public IItem Reward { get; private set; }
         public QuestState State { get; private set; }
         public int LevelRequirement { get; } //TODO: Level requirement on quests
@@ -22,7 +21,6 @@ namespace JRPG.Models
             Title = title;
             Description = description;
             Experience = experience;
-            Requirement = requirement;
             Reward = reward;
             State = state;
             _questsChannel = questChannel;
