@@ -27,13 +27,11 @@ namespace JRPG.Models
         }
         protected override void QuestActive()
         {
-            //TODO: Track an EnemyDiedEvent using a combat channel
             _combatChannel.EnemyDiedEvent += EnemyDiedEvent;
         }
 
         protected override void QuestCompleted()
         {
-            //TODO: Remove tracker from EnemyDiedEvent
             _combatChannel.EnemyDiedEvent -= EnemyDiedEvent;
 
         }

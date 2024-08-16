@@ -35,7 +35,8 @@ namespace JRPG.Models
                         PerformAction(damage);
                         break;
                     case "Protect":
-                        
+                        //TODO: Add armor to the player to reduce the damage
+                        //TODO: Make the armor last for a specific turn number
                         break;
                     case "Heal":
                         HealPlayer(item);
@@ -54,15 +55,12 @@ namespace JRPG.Models
                 //}
                 //else if (effect == "protect")
                 //{
-                //    //TODO: Add armor to the player to reduce the damage
-                //    //TODO: Make the armor last for a specific turn number
+                //    
                 //}
                 //else if (effect == "heal")
                 //{
                 //    HealPlayer(item);
-                //    //TODO: When the player heals he should lose his turn and take damage from the mob
-                //    /*TODO: Make the necessary checks for taking damage i.e. check health of the player, check if player died after the damage, display message,
-                //    Best way to implent it is probably by separating the PerformAction method into 2 for Player taking damage and Entity taking damage*/
+                //    
                 //}
                 //else if (effect == "buff")
                 //{

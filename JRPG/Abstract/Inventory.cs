@@ -42,7 +42,6 @@ namespace JRPG.Abstract
                 {
                     _inventory.Remove(item);
                     _equippedItems.Add(item);
-                    //TODO: Subscribe to the same event in PlayerStats to update the stats
                 }
             }
         }
@@ -52,7 +51,6 @@ namespace JRPG.Abstract
             {
                 _equippedItems.Remove(item);
                 _inventory.Add(item);
-                //TODO: Subscribe to the same event in PlayerStats to update the stats
             }
         }
 

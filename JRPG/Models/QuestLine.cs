@@ -47,7 +47,7 @@ namespace JRPG.Models
         }
         public void CompleteQuest(IQuest quest)
         {
-            //TODO: Only move the quest to _completedQuests when it has been delivered
+            
         }
 
         public bool Contains(IQuest quest)
