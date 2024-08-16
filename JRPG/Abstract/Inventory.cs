@@ -61,7 +61,7 @@ namespace JRPG.Abstract
         }
         private void ItemRemoved(IItem item)
         {
-            _inventory.Add(item);
+            _inventory.Remove(item);
         }
     }
 }
