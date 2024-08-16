@@ -9,6 +9,7 @@ namespace JRPG.Models
     {
         private Action<Entity> _reward;
         public bool IsFinalScreen { get; private set; }
+        public bool Completed { get; private set; }
 
         public string Text  { get; private set; }
 

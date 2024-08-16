@@ -7,6 +7,7 @@ namespace JRPG.Abstract
 {
     public interface IDialogScreen
     {
+        bool Completed { get; }
         bool IsFinalScreen { get; }
         string Text { get; }
         string Title { get; }

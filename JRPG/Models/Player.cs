@@ -14,10 +14,8 @@ namespace JRPG.Models
         private readonly List<IAbility> _abilities;
         private readonly List<IQuestLine> _activeQuestLines;
         private readonly List<IQuestLine> _completedQuestLines;
-        private readonly QuestChannel _questChannel;
 
         public Inventory Inventory { get; private set; }
-        
         public IEnumerable<IAbility> Abilities { get { return _abilities; } }
         public IEnumerable<IQuestLine> ActiveQuestLines { get { return _activeQuestLines; } }
         public IEnumerable<IQuestLine> CompletedQuestLines { get { return _completedQuestLines; } }
@@ -28,14 +26,12 @@ namespace JRPG.Models
         {
             _abilities = new List<IAbility>();
             Inventory = new Inventory(inventoryChannel);
-            Inventory.Enable();
             _activeQuestLines = new List<IQuestLine>();
             _completedQuestLines = new List<IQuestLine>();
-            _questChannel = questChannel;
-            _questChannel.QuestCompleteEvent += OnQuestCompleted;
-            _questChannel.QuestActivatedEvent += OnQuestActivated;
+            questChannel.QuestCompleteEvent += OnQuestCompleted;
+            questChannel.QuestActivatedEvent += OnQuestActivated;
             Gold = 1000;
-            Stats = new PlayerStats(200, _questChannel, attackSpeed: 10);
+            Stats = new PlayerStats(200, questChannel, inventoryChannel, attackSpeed: 10);
         }
         private void OnQuestCompleted(IQuest quest)
         {
@@ -53,10 +49,6 @@ namespace JRPG.Models
         {
             _abilities.Add(ability);
         }
-        
-        
-
-        
         public void SpendGold(int input)
         {
             Gold -= input;

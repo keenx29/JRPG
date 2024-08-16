@@ -5,6 +5,7 @@ using JRPG.States;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace JRPG
 {
@@ -146,7 +147,7 @@ namespace JRPG
 
             var quest = new DeliveryQuest("Inform the villagers!",
                 "An army is marching towards us...",
-                10, questReward,questChannel);
+                10, questReward,questChannel,inventoryChannel);
             questLine.AddQuest(quest);
 
             var acceptQuestDialogScreen = new DialogScreen($"Good luck {player.GetComponent<SpriteComponent>().Sprite}!",
@@ -192,8 +193,8 @@ namespace JRPG
             npc5.Position = new Vector3(4, 2, 0);
             var questLine2 = new QuestLine("This is only the beginning");
             var quest2Reward = new Consumable("Potion of Healing", 5, health: 25);
-            var quest2 = new KillQuest("Help the soldiers!", "Kill 3 enemies",new BasicMob(),3,50,quest2Reward,combatChannel,questChannel);
-            var quest3 = new DeliveryQuest("Help the soldiers!","Take these healing potions and bring them to the forest",10,quest2Reward, questChannel);
+            var quest2 = new KillQuest("Help the soldiers!", "Kill 3 enemies",new BasicMob(),1,50,quest2Reward,combatChannel,questChannel,inventoryChannel);
+            var quest3 = new DeliveryQuest("Help the soldiers!","Take these healing potions and bring them to the forest",10,quest2Reward, questChannel, inventoryChannel);
             questLine2.AddQuest(quest2);
 
             var acceptQuest2DialogScreen = new DialogScreen($"Good luck {player.GetComponent<SpriteComponent>().Sprite}!",

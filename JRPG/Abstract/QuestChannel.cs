@@ -8,6 +8,7 @@ namespace JRPG.Abstract
     {
         public Action<IQuest> QuestCompleteEvent;
         public Action<IQuest> QuestActivatedEvent;
+        public Action<IQuest> QuestDeliveredEvent;
 
         public void CompleteQuest (IQuest completedQuest)
         {
@@ -16,6 +17,10 @@ namespace JRPG.Abstract
         public void AssignQuest (IQuest questToAssign)
         {
             QuestActivatedEvent?.Invoke(questToAssign); 
+        }
+        public void DeliverQuest (IQuest questToAssign)
+        {
+            QuestDeliveredEvent?.Invoke(questToAssign); 
         }
     }
 }

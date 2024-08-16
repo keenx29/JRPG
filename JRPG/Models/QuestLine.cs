@@ -37,14 +37,17 @@ namespace JRPG.Models
                 firstQuest.ActivateQuest();
             }
         }
-
-        public void CompleteQuest(IQuest quest)
+        public void DeliverQuest(IQuest quest)
         {
             //TODO: Only move the quest to _completedQuests when it has been delivered
-            if (_remainingQuests.Count > 0 && _remainingQuests.Peek() == quest)
+            if (_remainingQuests.Count > 0 && _remainingQuests.Peek() == quest && quest.State == QuestState.Delivered)
             {
                 _completedQuests.Add(_remainingQuests.Dequeue());
             }
+        }
+        public void CompleteQuest(IQuest quest)
+        {
+            //TODO: Only move the quest to _completedQuests when it has been delivered
         }
 
         public bool Contains(IQuest quest)

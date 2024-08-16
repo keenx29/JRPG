@@ -7,9 +7,12 @@ namespace JRPG.Models
 {
     public class DeliveryQuest : Quest
     {
-        public DeliveryQuest(string title, string description, int experience, IItem reward, QuestChannel questChannel, QuestState state = QuestState.Completed) : base(title, description, experience, reward, state, questChannel)
+        private readonly QuestChannel _questChannel;
+        private readonly InventoryChannel _inventoryChannel;
+        public DeliveryQuest(string title, string description, int experience, IItem reward, QuestChannel questChannel,InventoryChannel inventoryChannel, QuestState state = QuestState.Completed) : base(title, description, experience, reward, state, questChannel)
         {
-
+            _questChannel = questChannel;
+            _inventoryChannel = inventoryChannel;
         }
 
         protected override void QuestActive()
@@ -20,6 +23,14 @@ namespace JRPG.Models
         protected override void QuestCompleted()
         {
             
+        }
+
+        protected override void QuestDelivered()
+        {
+            if (Reward != null)
+            {
+                _inventoryChannel.AddItem(Reward); 
+            }
         }
     }
 }

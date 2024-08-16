@@ -17,6 +17,7 @@ namespace JRPG.Abstract
             _inventory = new List<IItem>();
             _equippedItems = new List<IEquippableItem>();
             _inventoryChannel = inventoryChannel;
+            this.Enable();
         }
         public void Enable()
         {

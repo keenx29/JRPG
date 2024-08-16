@@ -6,7 +6,8 @@ namespace JRPG.Abstract
 {
     public class PlayerStats
     {
-        private QuestChannel _questChannel;
+        private readonly QuestChannel _questChannel;
+        private readonly InventoryChannel _inventoryChannel;
         private int Experience;
         public int Hp { get; set; }
         public int AttackSpeed { get; set; }
@@ -15,7 +16,7 @@ namespace JRPG.Abstract
         public int DamageBuff { get; set; }
         public Action<int> PlayerReceivedExperience;
 
-        public PlayerStats(int hp,QuestChannel questChannel, int? attackSpeed = null, int? attackDamage = null, int? defense = null, int? damageBuff = null, int? experience = null)
+        public PlayerStats(int hp,QuestChannel questChannel,InventoryChannel inventoryChannel, int? attackSpeed = null, int? attackDamage = null, int? defense = null, int? damageBuff = null, int? experience = null)
         {
             Hp = hp;
             AttackSpeed = attackSpeed ?? 0;
@@ -24,11 +25,30 @@ namespace JRPG.Abstract
             DamageBuff = damageBuff ?? 0;
             Experience = experience ?? 0;
             _questChannel = questChannel;
+            _inventoryChannel = inventoryChannel;
+            this.Enable();
         }
         public void Enable()
         {
             _questChannel.QuestCompleteEvent += QuestCompleteEvent;
+            _inventoryChannel.ItemEquippedEvent += ItemEquippedEvent;
+            _inventoryChannel.ItemUnequippedEvent += ItemUnequippedEvent;
         }
+
+        private void ItemUnequippedEvent(IEquippableItem item)
+        {
+            AttackSpeed += item.Weight;
+            AttackDamage -= item.Attack;
+            Defense -= item.Defense;
+        }
+
+        private void ItemEquippedEvent(IEquippableItem item)
+        {
+            AttackSpeed -= item.Weight;
+            AttackDamage += item.Attack;
+            Defense += item.Defense;
+        }
+
         public void Disable()
         {
             _questChannel.QuestCompleteEvent -= QuestCompleteEvent;

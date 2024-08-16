@@ -8,12 +8,14 @@ namespace JRPG.Models
     public class KillQuest : Quest
     {
         private CombatChannel _combatChannel;
+        private InventoryChannel _inventoryChannel;
         private ICombatEntity _enemyToDefeat;
         public int NumberOfEnemiesToDestroy { get; }
         public int EnemiesDefeated { get; private set; }
-        public KillQuest(string title, string description,ICombatEntity enemyToDefeat,int numberOfEnemiesToDestroy, int experience, IItem reward,CombatChannel combatChannel,QuestChannel questChannel,QuestState state = QuestState.Pending) : base(title, description, experience, reward, state, questChannel)
+        public KillQuest(string title, string description,ICombatEntity enemyToDefeat,int numberOfEnemiesToDestroy, int experience, IItem reward,CombatChannel combatChannel,QuestChannel questChannel,InventoryChannel inventoryChannel,QuestState state = QuestState.Pending) : base(title, description, experience, reward, state, questChannel)
         {
             _combatChannel = combatChannel;
+            _inventoryChannel = inventoryChannel;
             NumberOfEnemiesToDestroy = numberOfEnemiesToDestroy;
             _enemyToDefeat = enemyToDefeat;
             Enable();
@@ -33,6 +35,7 @@ namespace JRPG.Models
         {
             //TODO: Remove tracker from EnemyDiedEvent
             _combatChannel.EnemyDiedEvent -= EnemyDiedEvent;
+
         }
         private void EnemyDiedEvent(ICombatEntity defeatedEnemy)
         {
@@ -42,8 +45,17 @@ namespace JRPG.Models
             }
 
             if (EnemiesDefeated == NumberOfEnemiesToDestroy)
+            
             {
                 this.Complete();
+            }
+        }
+
+        protected override void QuestDelivered()
+        {
+            if (Reward != null)
+            {
+                _inventoryChannel.AddItem(Reward); 
             }
         }
     }

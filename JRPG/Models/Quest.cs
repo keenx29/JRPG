@@ -45,17 +45,25 @@ namespace JRPG.Models
         {
             _questsChannel.QuestActivatedEvent += QuestActiveEvent;
             _questsChannel.QuestCompleteEvent += QuestCompletedEvent;
+            _questsChannel.QuestDeliveredEvent += QuestDeliveredEvent;
 
             if (State == QuestState.Active)
             {
                 QuestActive();
             }
         }
+        protected abstract void QuestDelivered();
+        private void QuestDeliveredEvent(IQuest deliveredQuest)
+        {
+            if (deliveredQuest.Title != Title) return;
+            State = QuestState.Delivered;
+        }
 
         protected virtual void Disable()
         {
             _questsChannel.QuestActivatedEvent -= QuestActiveEvent;
             _questsChannel.QuestCompleteEvent -= QuestCompletedEvent;
+            _questsChannel.QuestDeliveredEvent -= QuestDeliveredEvent;
         }
         private void QuestActiveEvent (IQuest activeQuest)
         {
@@ -73,7 +81,6 @@ namespace JRPG.Models
         {
             if (completedQuest.Title != Title) return;
 
-            State = QuestState.Completed;
             QuestCompleted();
         }
 
