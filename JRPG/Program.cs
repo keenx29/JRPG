@@ -216,6 +216,17 @@ namespace JRPG
             var quest2Dialog = new Dialog(quest2DialogScreen);
             npc5.AddComponent(new DialogComponent(quest2Dialog));
             npc5.AddComponent(new SpriteComponent { Sprite = 'Q' });
+            
+            var npc6 = new Entity();
+            npc6.Position = new Vector3(4, 6, 0);
+            var questLine3 = new QuestLine("The farmer's way.");
+            var quest4Reward = new Gear("Leggings",5,3);
+            var quest4 = new KillQuest("Help the farmers!", "An animal is munching on the farmer's produce",new BasicMob(),1,50,quest2Reward,combatChannel,questChannel,inventoryChannel);
+            questLine3.AddQuest(quest4);
+            var questLineList = new List<IQuestLine> { questLine2,questLine3 };
+            var questLineDialog = new QuestDialog(questLineList);
+            npc6.AddComponent(new QuestComponent(questLineDialog,questChannel));
+            npc6.AddComponent(new SpriteComponent { Sprite = 'T' });
 
 
             var zone1 = new Zone("Zone 1", new Vector3(ZoneWidth, ZoneHeight, ZoneDepth));
@@ -227,6 +238,7 @@ namespace JRPG
             zone1.AddEntity(npc2);
             zone1.AddEntity(npc3);
             zone1.AddEntity(npc5);
+            zone1.AddEntity(npc6);
             //zone1.AddEntity(npc4);
             
             Engine = new Engine();

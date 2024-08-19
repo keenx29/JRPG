@@ -20,7 +20,8 @@ namespace JRPG.States
         //private int _dialogHeight;
         //private int _selectedOption;
         //private IDialogScreen _currentScreen;
-
+        //TODO: Upon activation check which screens have already been seen
+        //TODO: Pressing ESC in the dialog should cancel it and next time start from the beginning
         public DialogState(IDialog dialog, Entity instigator)
         {
             _dialog = dialog;
