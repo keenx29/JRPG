@@ -9,7 +9,7 @@ namespace JRPG.Models
     {
         private readonly QuestChannel _questChannel;
         private readonly InventoryChannel _inventoryChannel;
-        public DeliveryQuest(string title, string description, int experience, IItem reward, QuestChannel questChannel,InventoryChannel inventoryChannel, QuestState state = QuestState.Completed) : base(title, description, experience, reward, state, questChannel)
+        public DeliveryQuest(string title, string description, int experience, IItem reward, QuestChannel questChannel,InventoryChannel inventoryChannel, QuestState state = QuestState.Pending) : base(title, description, experience, reward, state, questChannel)
         {
             _questChannel = questChannel;
             _inventoryChannel = inventoryChannel;
@@ -17,7 +17,7 @@ namespace JRPG.Models
 
         protected override void QuestActive()
         {
-            
+            Complete();
         }
 
         protected override void QuestCompleted()

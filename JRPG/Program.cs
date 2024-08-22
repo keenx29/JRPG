@@ -136,48 +136,48 @@ namespace JRPG
             //var questDialog = new Dialog(questDialogScreen);
             //npc3.AddComponent(new DialogComponent(questDialog));
             //npc3.AddComponent(new SpriteComponent { Sprite = '|' });
-            
-            var npc3 = new Entity();
 
-            npc3.Position = new Vector3(8, 1, 0);
+            //var npc3 = new Entity();
 
-            var questLine = new QuestLine("War is upon us.");
+            //npc3.Position = new Vector3(8, 1, 0);
 
-            var questReward = new Weapon("Defender", 20, 10);
+            //var questLine = new QuestLine("War is upon us.");
 
-            var quest = new DeliveryQuest("Inform the villagers!",
-                "An army is marching towards us...",
-                10, questReward,questChannel,inventoryChannel);
-            questLine.AddQuest(quest);
+            //var questReward = new Weapon("Defender", 20, 10);
 
-            var acceptQuestDialogScreen = new DialogScreen($"Good luck {player.GetComponent<SpriteComponent>().Sprite}!",
-                "Thank you for your assistance.",
-                (e) =>
-                {
-                    var player = e.GetComponent<PlayerComponent>().Player;
-                    player.StartQuestLine(questLine);
-                }, isFinalScreen: true);
+            //var quest = new DeliveryQuest("Inform the villagers!",
+            //    "An army is marching towards us...",
+            //    10, questReward,questChannel,inventoryChannel);
+            //questLine.AddQuest(quest);
 
-            var denyQuestDialogScreen = new DialogScreen($"Good luck on your journey {player.GetComponent<SpriteComponent>().Sprite}!",
-                "Come back when you're ready.",
-                isFinalScreen: true);
+            //var acceptQuestDialogScreen = new DialogScreen($"Good luck {player.GetComponent<SpriteComponent>().Sprite}!",
+            //    "Thank you for your assistance.",
+            //    (e) =>
+            //    {
+            //        var player = e.GetComponent<PlayerComponent>().Player;
+            //        player.StartQuestLine(questLine);
+            //    }, isFinalScreen: true);
 
-            var optionalDialogScreen = new Dictionary<string, IDialogScreen>
-            {
-                { "Accept!", acceptQuestDialogScreen },
-                { "Deny!", denyQuestDialogScreen }
-            };
+            //var denyQuestDialogScreen = new DialogScreen($"Good luck on your journey {player.GetComponent<SpriteComponent>().Sprite}!",
+            //    "Come back when you're ready.",
+            //    isFinalScreen: true);
 
-            var questDialogScreen = new DialogScreen(quest.Title, (quest.Description + "\nPlease take this information to everyone"),
-                optionalScreens: optionalDialogScreen);
+            //var optionalDialogScreen = new Dictionary<string, IDialogScreen>
+            //{
+            //    { "Accept!", acceptQuestDialogScreen },
+            //    { "Deny!", denyQuestDialogScreen }
+            //};
 
-            var questDialog = new Dialog(questDialogScreen);
+            //var questDialogScreen = new DialogScreen(quest.Title, (quest.Description + "\nPlease take this information to everyone"),
+            //    optionalScreens: optionalDialogScreen);
 
-            npc3.AddComponent(new DialogComponent(questDialog));
+            //var questDialog = new Dialog(questDialogScreen);
 
-            npc3.AddComponent(new SpriteComponent { Sprite = '|' });
+            //npc3.AddComponent(new DialogComponent(questDialog));
 
-            
+            //npc3.AddComponent(new SpriteComponent { Sprite = '|' });
+
+
             //var npc4 = new Entity();
             //npc4.Position = new Vector3(10, 1, 0);
             //var questDialogScreen2 = new DialogScreen(quest.Title, ("Thank you so for bringing this to us!"), (e) =>
@@ -189,41 +189,45 @@ namespace JRPG
             //npc4.AddComponent(new DialogComponent(questDialog2));
             //npc4.AddComponent(new SpriteComponent { Sprite = 'D' });
 
-            var npc5 = new Entity();
-            npc5.Position = new Vector3(4, 2, 0);
+            //var npc5 = new Entity();
+            //npc5.Position = new Vector3(4, 2, 0);
             var questLine2 = new QuestLine("This is only the beginning");
             var quest2Reward = new Consumable("Potion of Healing", 5, health: 25);
-            var quest2 = new KillQuest("Help the soldiers!", "Kill 3 enemies",new BasicMob(),1,50,quest2Reward,combatChannel,questChannel,inventoryChannel);
-            var quest3 = new DeliveryQuest("Help the soldiers!","Take these healing potions and bring them to the forest",10,quest2Reward, questChannel, inventoryChannel);
+            var quest2 = new KillQuest("Help the soldiers!", "Kill 3 enemies", new BasicMob(), 1, 50, quest2Reward, combatChannel, questChannel, inventoryChannel);
+            var quest3 = new DeliveryQuest("Help the soldiers!", "Take these healing potions and bring them to the forest", 10, quest2Reward, questChannel, inventoryChannel);
             questLine2.AddQuest(quest2);
+            questLine2.AddQuest(quest3);
 
-            var acceptQuest2DialogScreen = new DialogScreen($"Good luck {player.GetComponent<SpriteComponent>().Sprite}!",
-                "Thank you for your assistance.",
-                (e) =>
-                {
-                    playerModel.StartQuestLine(questLine2);
-                    questLine2.Start();
-                }, isFinalScreen: true);
+            //var acceptQuest2DialogScreen = new DialogScreen($"Good luck {player.GetComponent<SpriteComponent>().Sprite}!",
+            //    "Thank you for your assistance.",
+            //    (e) =>
+            //    {
+            //        playerModel.StartQuestLine(questLine2);
+            //        questLine2.Start();
+            //    }, isFinalScreen: true);
 
-            var optionalQuest2DialogScreens = new Dictionary<string, IDialogScreen>
-            {
-                { "Accept!", acceptQuest2DialogScreen },
-                { "Deny!", denyQuestDialogScreen }
-            };
+            //var optionalQuest2DialogScreens = new Dictionary<string, IDialogScreen>
+            //{
+            //    { "Accept!", acceptQuest2DialogScreen },
+            //    { "Deny!", denyQuestDialogScreen }
+            //};
 
-            var quest2DialogScreen = new DialogScreen(quest2.Title, (quest2.Description + "\nPlease help them!"),
-                optionalScreens: optionalQuest2DialogScreens);
-            var quest2Dialog = new Dialog(quest2DialogScreen);
-            npc5.AddComponent(new DialogComponent(quest2Dialog));
-            npc5.AddComponent(new SpriteComponent { Sprite = 'Q' });
-            
+            //var quest2DialogScreen = new DialogScreen(quest2.Title, (quest2.Description + "\nPlease help them!"),
+            //    optionalScreens: optionalQuest2DialogScreens);
+            //var quest2Dialog = new Dialog(quest2DialogScreen);
+            //npc5.AddComponent(new DialogComponent(quest2Dialog));
+            //npc5.AddComponent(new SpriteComponent { Sprite = 'Q' });
+
             var npc6 = new Entity();
             npc6.Position = new Vector3(4, 6, 0);
             var questLine3 = new QuestLine("The farmer's way.");
             var quest4Reward = new Gear("Leggings",5,3);
             var quest4 = new KillQuest("Help the farmers!", "An animal is munching on the farmer's produce",new BasicMob(),1,50,quest2Reward,combatChannel,questChannel,inventoryChannel);
             questLine3.AddQuest(quest4);
-            var questLineList = new List<IQuestLine> { questLine2,questLine3 };
+            var questLine4 = new QuestLine("Around the world.");
+            var quest5 = new DeliveryQuest("Bring this message to my family!", "They live out in the woods, please inform them I have to leave in 2 weeks.", 50, null, questChannel, inventoryChannel);
+            questLine4.AddQuest(quest5);
+            var questLineList = new List<IQuestLine> { questLine2,questLine3,questLine4 };
             var questLineDialog = new QuestDialog(questLineList);
             npc6.AddComponent(new QuestComponent(questLineDialog,questChannel));
             npc6.AddComponent(new SpriteComponent { Sprite = 'T' });
@@ -236,8 +240,8 @@ namespace JRPG
             zone1.AddEntity(wall);
             zone1.AddEntity(npc1);
             zone1.AddEntity(npc2);
-            zone1.AddEntity(npc3);
-            zone1.AddEntity(npc5);
+            //zone1.AddEntity(npc3);
+            //zone1.AddEntity(npc5);
             zone1.AddEntity(npc6);
             //zone1.AddEntity(npc4);
             

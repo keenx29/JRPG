@@ -59,16 +59,26 @@ namespace JRPG.States
                         {
                             Console.WriteLine($"{killQuest.Title} - {killQuest.Reward.Name} - {killQuest.EnemiesDefeated}/{killQuest.NumberOfEnemiesToDestroy}");
                         }
+                        else if (quest.Reward != null)
+                        {
+                            Console.WriteLine($"{quest.Title} - {quest.Reward.Name}, {quest.Experience} XP - In Progress");
+                        }
                         else
                         {
-                            Console.WriteLine($"{quest.Title} - {quest.Reward.Name} - In Progress");
+                            Console.WriteLine($"{quest.Title} - {quest.Experience} XP - In Progress");
                         }
                     }
                     if (quest.State == QuestState.Completed)
                     {
-                        Console.WriteLine($"{quest.Title} - {quest.Reward.Name} - Done");
+                        if (quest.Reward != null)
+                        {
+                            Console.WriteLine($"{quest.Title} - {quest.Reward.Name}, {quest.Experience} XP - Done");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"{quest.Title} - {quest.Experience} XP - Done");
+                        }
                     }
-                    
                     ColorConsole(false);
                 }
                 questIndex++;

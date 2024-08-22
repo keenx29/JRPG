@@ -28,22 +28,25 @@ namespace JRPG.Models
             Inventory = new Inventory(inventoryChannel);
             _activeQuestLines = new List<IQuestLine>();
             _completedQuestLines = new List<IQuestLine>();
-            questChannel.QuestCompleteEvent += OnQuestCompleted;
-            questChannel.QuestActivatedEvent += OnQuestActivated;
+            questChannel.QuestDeliveredEvent += OnQuestDelivered;
+            questChannel.QuestLineActivatedEvent += OnQuestLineActivated;
             Gold = 1000;
             Stats = new PlayerStats(200, questChannel, inventoryChannel, attackSpeed: 10);
         }
-        private void OnQuestCompleted(IQuest quest)
+        private void OnQuestDelivered(IQuest quest)
         {
-            CompleteQuest(quest);
+            DeliverQuest(quest);
         }
-        private void OnQuestActivated(IQuest quest)
+        private void OnQuestLineActivated(IQuestLine questLine)
         {
-            var questLine = _activeQuestLines.FirstOrDefault(qLine => qLine.Contains(quest));
-            if (questLine != null)
+            //Adds a QuestLine to the activeQuestLines list if it is not already there
+            var isActive = _activeQuestLines.Contains(questLine,new QuestLineComparer());
+            if (!isActive)
             {
-                StartQuestLine(questLine);
+                _activeQuestLines.Add(questLine);
             }
+            //Starts the first quest in the remainingQuests queue
+            questLine.Start();
         }
         public void AddAbility(IAbility ability)
         {
@@ -58,24 +61,12 @@ namespace JRPG.Models
             Gold += input;
         }
         
-        
-        public void StartQuestLine(IQuestLine questLine)
-        {
-            //if (!_quests.Contains(questLine))
-            //{
-            //    _quests.Add(questLine);
-            //}
-            if (!_activeQuestLines.Contains(questLine))
-            {
-                _activeQuestLines.Add(questLine);
-            }
-            questLine.Start();
-        }
-        public void CompleteQuest(IQuest quest)
+        public void DeliverQuest(IQuest quest)
         {
             var questLine = _activeQuestLines.FirstOrDefault(qLine => qLine.Contains(quest));
             if (questLine != null)
             {
+                //TODO: This method does nothing and should be changed to DeliverQuest and remove the Quest from the remaining quests in the questLine
                 questLine.CompleteQuest(quest);
 
                 if (questLine.IsCompleted)

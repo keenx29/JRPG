@@ -11,6 +11,7 @@ namespace JRPG.Abstract
         IItem Reward { get; }
         QuestState State { get; }
         int LevelRequirement { get; }
+        IQuestLine questLine { get; }
         void ActivateQuest();
         void DeactivateQuest();
     }

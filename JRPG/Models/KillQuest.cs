@@ -9,7 +9,7 @@ namespace JRPG.Models
     {
         private CombatChannel _combatChannel;
         private InventoryChannel _inventoryChannel;
-        private ICombatEntity _enemyToDefeat;
+        public ICombatEntity EnemyToDefeat { get; private set; }
         public int NumberOfEnemiesToDestroy { get; }
         public int EnemiesDefeated { get; private set; }
         public KillQuest(string title, string description,ICombatEntity enemyToDefeat,int numberOfEnemiesToDestroy, int experience, IItem reward,CombatChannel combatChannel,QuestChannel questChannel,InventoryChannel inventoryChannel,QuestState state = QuestState.Pending) : base(title, description, experience, reward, state, questChannel)
@@ -17,7 +17,7 @@ namespace JRPG.Models
             _combatChannel = combatChannel;
             _inventoryChannel = inventoryChannel;
             NumberOfEnemiesToDestroy = numberOfEnemiesToDestroy;
-            _enemyToDefeat = enemyToDefeat;
+            EnemyToDefeat = enemyToDefeat;
             Enable();
         }
         protected override void Enable()
@@ -37,7 +37,7 @@ namespace JRPG.Models
         }
         private void EnemyDiedEvent(ICombatEntity defeatedEnemy)
         {
-            if (defeatedEnemy.GetType() == _enemyToDefeat.GetType())
+            if (defeatedEnemy.GetType() == EnemyToDefeat.GetType())
             {
                 this.EnemiesDefeated++;
             }

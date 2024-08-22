@@ -30,7 +30,7 @@ namespace JRPG.Abstract
         }
         public void Enable()
         {
-            _questChannel.QuestCompleteEvent += QuestCompleteEvent;
+            _questChannel.QuestDeliveredEvent += QuestDeliveredEvent;
             _inventoryChannel.ItemEquippedEvent += ItemEquippedEvent;
             _inventoryChannel.ItemUnequippedEvent += ItemUnequippedEvent;
         }
@@ -51,9 +51,9 @@ namespace JRPG.Abstract
 
         public void Disable()
         {
-            _questChannel.QuestCompleteEvent -= QuestCompleteEvent;
+            _questChannel.QuestCompleteEvent -= QuestDeliveredEvent;
         }
-        private void QuestCompleteEvent(IQuest completedQuest)
+        private void QuestDeliveredEvent(IQuest completedQuest)
         {
             Experience += completedQuest.Experience;
             PlayerReceivedExperience?.Invoke(Experience);

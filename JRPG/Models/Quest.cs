@@ -15,6 +15,7 @@ namespace JRPG.Models
         public IItem Reward { get; private set; }
         public QuestState State { get; private set; }
         public int LevelRequirement { get; } //TODO: Level requirement on quests
+        public IQuestLine questLine { get; private set; }
 
         public Quest(string title, string description, int experience, IItem reward, QuestState state,QuestChannel questChannel)
         {

@@ -14,6 +14,8 @@ namespace JRPG.States
         private readonly Entity _instigator;
         private readonly Player _player;
         private readonly QuestChannel _questChannel;
+        private bool _questInspectScreen = false;
+        private bool _questDeliverScreen = false;
         private int _dialogHeight;
         private int _selectedOption;
         private IQuestLine _currentQuestLine;
@@ -42,6 +44,13 @@ namespace JRPG.States
                     _currentQuestLine = questLine;
                     if (_currentQuestLine.RemainingQuests.FirstOrDefault()?.State == QuestState.Active)
                     {
+                        _currentQuest = _currentQuestLine.RemainingQuests.First();
+                        RenderQuestInProgress(_currentQuestLine);
+                        return;
+                    }
+                    else if (_currentQuestLine.RemainingQuests.FirstOrDefault()?.State == QuestState.Completed)
+                    {
+                        _questDeliverScreen = true;
                         _currentQuest = _currentQuestLine.RemainingQuests.First();
                         RenderQuestInProgress(_currentQuestLine);
                         return;
@@ -93,41 +102,92 @@ namespace JRPG.States
             _dialogHeight = Console.CursorTop;
             var index = 0;
             var killQuest = _currentQuest as KillQuest;
+            var deliveryQuest = _currentQuest as DeliveryQuest;
+            if (deliveryQuest != null)
+            {
+                if (deliveryQuest.State == QuestState.Pending)
+                {
+                    Console.WriteLine($"{deliveryQuest.Description}");
+                    Console.WriteLine("-------------------------------------------");
+                    if (_selectedOption == index)
+                    {
+                        ColorConsole(true);
+                        Console.WriteLine("Accept!");
+                        ColorConsole(false);
+                        Console.WriteLine("Deny!");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Accept!");
+                        ColorConsole(true);
+                        Console.WriteLine("Deny!");
+                        ColorConsole(false);
+                    }
+                }
+            }
             if (killQuest != null)
             {
-                if (killQuest.State == QuestState.Active)
+                if (killQuest.State == QuestState.Pending)
                 {
-                    Console.WriteLine($"Progress: {killQuest.EnemiesDefeated}/{killQuest.NumberOfEnemiesToDestroy}");
-                    Console.WriteLine($"Good luck!");
+                    Console.WriteLine($"{killQuest.Description}");
+                    Console.WriteLine($"Slay: {killQuest.NumberOfEnemiesToDestroy} {(killQuest.NumberOfEnemiesToDestroy == 1 ? killQuest.EnemyToDefeat.Name : killQuest.EnemyToDefeat.Name + "s")}");
                     Console.WriteLine("-------------------------------------------");
+                    if (_selectedOption == index)
+                    {
+                        ColorConsole(true);
+                        Console.WriteLine("Accept!");
+                        ColorConsole(false);
+                        Console.WriteLine("Deny!");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Accept!");
+                        ColorConsole(true);
+                        Console.WriteLine("Deny!");
+                        ColorConsole(false);
+                    }
+                }
+                else if (killQuest.State == QuestState.Active)
+                {
+                    Console.WriteLine($"{killQuest.Description}");
+                    Console.WriteLine($"{killQuest.Description}");
+                }
+            }
+            if (_currentQuest.State == QuestState.Completed)
+            {
+                _questDeliverScreen = true;
+                Console.WriteLine($"Thanks for the help. Here is your reward:");
+                if (_currentQuest.Reward != null)
+                {
+                    var rewardString = $"{_currentQuest.Reward.Name}";
+                    if (_currentQuest.Reward is Gear)
+                    {
+                        var reward = _currentQuest.Reward as Gear;
+                        rewardString += $" {reward.Attack} Damage, {reward.Defense} Defense, {reward.Weight} kgs";
+                    }
+                    else if (_currentQuest.Reward is Consumable)
+                    {
+                        var reward = _currentQuest.Reward as Consumable;
+                        rewardString += $" {reward.GetAmount()} {reward.GetEffect()}";
+                    }
+                    Console.WriteLine(rewardString);
+                }
+                Console.WriteLine($"{_currentQuest.Experience} XP");
+                Console.WriteLine("-------------------------------------------");
+                if (_selectedOption == index)
+                {
+                    ColorConsole(true);
+                    Console.WriteLine("Complete!");
+                    ColorConsole(false);
+                    Console.WriteLine("Close!");
+                }else
+                {
+                    Console.WriteLine("Complete!");
                     ColorConsole(true);
                     Console.WriteLine("Close!");
                     ColorConsole(false);
-                }
-                else if (killQuest.State == QuestState.Completed)
-                {
-                    Console.WriteLine($"Thanks for the help. Here is your reward:");
-                    if (killQuest.Reward != null)
-                    {
-                        var rewardString = $"{killQuest.Reward.Name}";
-                        if (killQuest.Reward is Gear)
-                        {
-                            var reward = killQuest.Reward as Gear;
-                            rewardString += $" {reward.Attack} Damage, {reward.Defense} Defense, {reward.Weight} kgs";
-                        }
-                        else if (killQuest.Reward is Consumable)
-                        {
-                            var reward = killQuest.Reward as Consumable;
-                            rewardString += $" {reward.GetAmount()} {reward.GetEffect()}";
-                        }
-                        Console.WriteLine(rewardString);
-                    }
-                    Console.WriteLine($"{killQuest.Experience} XP");
-                    Console.WriteLine("-------------------------------------------");
-                    ColorConsole(true );
-                    Console.WriteLine("Complete!");
-                    ColorConsole(false);
-                }
+                    
+                } 
             }
         }
 
@@ -152,32 +212,82 @@ namespace JRPG.States
             }
             else if (key.Key == ConsoleKey.S)
             {
-                if (_selectedOption < _dialog.QuestLines.Count())
+                if (_questInspectScreen || _questDeliverScreen)
+                {
+                    if (_selectedOption < 1)
+                    {
+                        _selectedOption++;
+                    }
+                }
+                else if (_selectedOption < _dialog.QuestLines.Count())
                 {
                     _selectedOption++;
                 }
             }
             else if (key.Key == ConsoleKey.Enter || key.Key == ConsoleKey.Spacebar)
             {
-                if (_selectedOption == _dialog.QuestLines.Count()) 
+                //Player selected a QuestLine and Quest
+                if (_questDeliverScreen) 
                 {
+                    if (_selectedOption == 0)
+                    {
+                        //If the player accepted the quest start it and exit the state
+                        _questChannel.DeliverQuest(_currentQuest);
+                        Program.Engine.PopState(this);
+                    }
+                    else
+                    {
+                        //If the player denies delivering the quest take him back to the available quest lines window
+                        _selectedOption = 0;
+                        _questDeliverScreen = false;
+                        RenderAvailableQuestLines();
+                        return;
+                    }
+                }
+                if (_questInspectScreen)
+                {
+                    if (_selectedOption == 0)
+                    {
+                        //If the player accepted the quest start it and exit the state
+                        _questChannel.AssignQuestLine(_currentQuestLine);
+                        Program.Engine.PopState(this);
+                    }
+                    else
+                    {
+                        //If the player denies the quest take him back to the available quest lines window
+                        _selectedOption = 0;
+                        _questInspectScreen = false;
+                        RenderAvailableQuestLines();
+                        return;
+                    }
+                }
+                else if (_selectedOption == _dialog.QuestLines.Count()) 
+                {
+                    //Player chooses to Close the windows without selecting a Quest and QuestLine
                     Program.Engine.PopState(this);
                     return;
                 }
                 else
                 {
-                    var selectedQuestLine = _dialog.QuestLines[_selectedOption];
-                    var selectedQuest = selectedQuestLine.RemainingQuests.First();
-                    _questChannel.AssignQuest(selectedQuest);
-                    _currentQuest = selectedQuest;
-                    _currentQuestLine = selectedQuestLine;
-                    RenderQuestInProgress(selectedQuestLine);
+                    _currentQuestLine = _dialog.QuestLines[_selectedOption];
+                    _currentQuest = _currentQuestLine.RemainingQuests.First();
+                    _questInspectScreen = true;
+                    _selectedOption = 0;
+                    RenderQuestInProgress(_currentQuestLine);
+
                 }
                 
                 //Start the selected QuestLine
                 return;
             }
-            RenderAvailableQuestLines();
+            if (_questInspectScreen || _questDeliverScreen)
+            {
+                RenderQuestInProgress(_currentQuestLine);
+            }
+            else
+            {
+                RenderAvailableQuestLines();
+            }
         }
         private void ColorConsole(bool selected)
         {
