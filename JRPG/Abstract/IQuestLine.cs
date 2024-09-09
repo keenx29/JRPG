@@ -11,7 +11,7 @@ namespace JRPG.Abstract
         bool IsCompleted { get; }
         void AddQuest(IQuest quest);
         void Start();
-        void CompleteQuest(IQuest quest);
+        void DeliverQuest(IQuest quest);
         bool Contains(IQuest quest);
         void Abandon(IQuest quest);
         //Queue<IQuest> Quests { get; }

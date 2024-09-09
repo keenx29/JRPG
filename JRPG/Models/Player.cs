@@ -66,8 +66,7 @@ namespace JRPG.Models
             var questLine = _activeQuestLines.FirstOrDefault(qLine => qLine.Contains(quest));
             if (questLine != null)
             {
-                //TODO: This method does nothing and should be changed to DeliverQuest and remove the Quest from the remaining quests in the questLine
-                questLine.CompleteQuest(quest);
+                questLine.DeliverQuest(quest);
 
                 if (questLine.IsCompleted)
                 {

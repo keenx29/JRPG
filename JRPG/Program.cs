@@ -191,12 +191,7 @@ namespace JRPG
 
             //var npc5 = new Entity();
             //npc5.Position = new Vector3(4, 2, 0);
-            var questLine2 = new QuestLine("This is only the beginning");
-            var quest2Reward = new Consumable("Potion of Healing", 5, health: 25);
-            var quest2 = new KillQuest("Help the soldiers!", "Kill 3 enemies", new BasicMob(), 1, 50, quest2Reward, combatChannel, questChannel, inventoryChannel);
-            var quest3 = new DeliveryQuest("Help the soldiers!", "Take these healing potions and bring them to the forest", 10, quest2Reward, questChannel, inventoryChannel);
-            questLine2.AddQuest(quest2);
-            questLine2.AddQuest(quest3);
+            
 
             //var acceptQuest2DialogScreen = new DialogScreen($"Good luck {player.GetComponent<SpriteComponent>().Sprite}!",
             //    "Thank you for your assistance.",
@@ -219,19 +214,39 @@ namespace JRPG
             //npc5.AddComponent(new SpriteComponent { Sprite = 'Q' });
 
             var npc6 = new Entity();
-            npc6.Position = new Vector3(4, 6, 0);
-            var questLine3 = new QuestLine("The farmer's way.");
-            var quest4Reward = new Gear("Leggings",5,3);
-            var quest4 = new KillQuest("Help the farmers!", "An animal is munching on the farmer's produce",new BasicMob(),1,50,quest2Reward,combatChannel,questChannel,inventoryChannel);
-            questLine3.AddQuest(quest4);
-            var questLine4 = new QuestLine("Around the world.");
-            var quest5 = new DeliveryQuest("Bring this message to my family!", "They live out in the woods, please inform them I have to leave in 2 weeks.", 50, null, questChannel, inventoryChannel);
-            questLine4.AddQuest(quest5);
-            var questLineList = new List<IQuestLine> { questLine2,questLine3,questLine4 };
-            var questLineDialog = new QuestDialog(questLineList);
-            npc6.AddComponent(new QuestComponent(questLineDialog,questChannel));
-            npc6.AddComponent(new SpriteComponent { Sprite = 'T' });
+            var npc7 = new Entity();
 
+            npc6.Position = new Vector3(4, 6, 0);
+            npc7.Position = new Vector3(10, 4, 0);
+
+            var NPC1QuestLine1 = new QuestLine("This is only the beginning");
+            var NPC1Quest1Reward = new Consumable("Potion of Healing", 5, health: 25);
+            var NPC1Quest1 = new KillQuest("Help with the battle!", "Kill 3 enemies", new BasicMob(), 1, 50, NPC1Quest1Reward, combatChannel, questChannel, inventoryChannel, npc6, npc6);
+            var NPC1Quest2 = new DeliveryQuest("Help the soldiers!", "Take these healing potions and bring them to the forest", 10, NPC1Quest1Reward, questChannel, inventoryChannel, npc6, npc7);
+            NPC1QuestLine1.AddQuest(NPC1Quest1);
+            NPC1QuestLine1.AddQuest(NPC1Quest2);
+
+            var NPC1QuestLine2 = new QuestLine("The farmer's way.");
+            var NPC1Quest3Reward = new Gear("Leggings",5,3);
+            var NPC1Quest3 = new KillQuest("test quest", "An animal is munching on the farmer's produce",new BasicMob(),1,50,NPC1Quest1Reward,combatChannel,questChannel,inventoryChannel,npc6,npc6);
+            NPC1QuestLine2.AddQuest(NPC1Quest3);
+
+            var NPC1QuestLine3 = new QuestLine("Around the world.");
+            var NPC1Quest4 = new DeliveryQuest("Bring this message to my family!", "They live out in the woods, please inform them I have to leave in 2 weeks.", 50, null, questChannel, inventoryChannel,npc6, npc7);
+            NPC1QuestLine3.AddQuest(NPC1Quest4);
+
+            var NPC1QuestLineList = new List<IQuestLine> { NPC1QuestLine1,NPC1QuestLine2,NPC1QuestLine3 };
+            var NPC1QuestLineDialog = new QuestDialog(NPC1QuestLineList);
+
+            var NPC2QuestLineList = new List<IQuestLine> { NPC1QuestLine1, NPC1QuestLine3 };
+            var NPC2QuestLineDialog = new QuestDialog(NPC2QuestLineList);
+
+
+            npc6.AddComponent(new QuestComponent(NPC1QuestLineDialog,questChannel));
+            npc6.AddComponent(new SpriteComponent { Sprite = 'A' });
+
+            npc7.AddComponent(new QuestComponent(NPC2QuestLineDialog, questChannel));
+            npc7.AddComponent(new SpriteComponent { Sprite = 'B' });
 
             var zone1 = new Zone("Zone 1", new Vector3(ZoneWidth, ZoneHeight, ZoneDepth));
             zone1.AddEntity(player);
@@ -243,6 +258,7 @@ namespace JRPG
             //zone1.AddEntity(npc3);
             //zone1.AddEntity(npc5);
             zone1.AddEntity(npc6);
+            zone1.AddEntity(npc7);
             //zone1.AddEntity(npc4);
             
             Engine = new Engine();

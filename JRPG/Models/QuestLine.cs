@@ -26,6 +26,7 @@ namespace JRPG.Models
 
         public void AddQuest(IQuest quest)
         {
+            Console.WriteLine($"{quest.Title} added to QuestLine: {this.Name}");
             _remainingQuests.Enqueue(quest);
         }
 
@@ -39,15 +40,11 @@ namespace JRPG.Models
         }
         public void DeliverQuest(IQuest quest)
         {
-            //TODO: Only move the quest to _completedQuests when it has been delivered
-            if (_remainingQuests.Count > 0 && _remainingQuests.Peek() == quest && quest.State == QuestState.Delivered)
+            //TODO: Switch QuestLine to Pending
+            if (_remainingQuests.Count > 0 && _remainingQuests.Peek().Title == quest.Title)
             {
                 _completedQuests.Add(_remainingQuests.Dequeue());
             }
-        }
-        public void CompleteQuest(IQuest quest)
-        {
-            
         }
 
         public bool Contains(IQuest quest)

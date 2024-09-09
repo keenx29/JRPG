@@ -22,7 +22,7 @@ namespace JRPG.Models.Components
 
         public void Enter(Entity entity)
         {
-            Program.Engine.PushState(new QuestDialogState(_dialog, entity, _questChannel));
+            Program.Engine.PushState(new QuestDialogState(_dialog, entity,Parent, _questChannel));
         }
     }
 }

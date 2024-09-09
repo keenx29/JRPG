@@ -12,18 +12,17 @@ namespace JRPG.Models
         public ICombatEntity EnemyToDefeat { get; private set; }
         public int NumberOfEnemiesToDestroy { get; }
         public int EnemiesDefeated { get; private set; }
-        public KillQuest(string title, string description,ICombatEntity enemyToDefeat,int numberOfEnemiesToDestroy, int experience, IItem reward,CombatChannel combatChannel,QuestChannel questChannel,InventoryChannel inventoryChannel,QuestState state = QuestState.Pending) : base(title, description, experience, reward, state, questChannel)
+        public KillQuest(string title, string description,ICombatEntity enemyToDefeat,int numberOfEnemiesToDestroy, int experience, IItem reward,CombatChannel combatChannel,QuestChannel questChannel,InventoryChannel inventoryChannel,Entity startPoint, Entity endPoint, QuestState state = QuestState.Pending) : base(title, description, experience, reward, state, startPoint, endPoint, questChannel)
         {
             _combatChannel = combatChannel;
             _inventoryChannel = inventoryChannel;
             NumberOfEnemiesToDestroy = numberOfEnemiesToDestroy;
             EnemyToDefeat = enemyToDefeat;
-            Enable();
+            EnemiesDefeated = 0;
         }
         protected override void Enable()
         {
             base.Enable();
-            EnemiesDefeated = 0;
         }
         protected override void QuestActive()
         {

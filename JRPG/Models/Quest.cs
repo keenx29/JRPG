@@ -15,14 +15,19 @@ namespace JRPG.Models
         public IItem Reward { get; private set; }
         public QuestState State { get; private set; }
         public int LevelRequirement { get; } //TODO: Level requirement on quests
-        public IQuestLine questLine { get; private set; }
 
-        public Quest(string title, string description, int experience, IItem reward, QuestState state,QuestChannel questChannel)
+        public Entity StartPoint { get; private set; }
+
+        public Entity EndPoint {  get; private set; }
+
+        public Quest(string title, string description, int experience, IItem reward, QuestState state,Entity startPoint,Entity endPoint,QuestChannel questChannel)
         {
             Title = title;
             Description = description;
             Experience = experience;
             Reward = reward;
+            StartPoint = startPoint;
+            EndPoint = endPoint;
             State = state;
             _questsChannel = questChannel;
         }
@@ -58,6 +63,7 @@ namespace JRPG.Models
         {
             if (deliveredQuest.Title != Title) return;
             State = QuestState.Delivered;
+            QuestDelivered();
         }
 
         protected virtual void Disable()

@@ -157,6 +157,8 @@ namespace JRPG.States
                 itemIndex++;
             }
             Console.WriteLine("-------------------------------------");
+            Console.WriteLine($"XP: {_player.Stats.Experience}");
+            Console.WriteLine("-------------------------------------");
             if (message != null)
             {
                 Console.WriteLine(message);

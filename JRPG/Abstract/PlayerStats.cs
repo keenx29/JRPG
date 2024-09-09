@@ -8,12 +8,12 @@ namespace JRPG.Abstract
     {
         private readonly QuestChannel _questChannel;
         private readonly InventoryChannel _inventoryChannel;
-        private int Experience;
-        public int Hp { get; set; }
-        public int AttackSpeed { get; set; }
-        public int AttackDamage { get; set; }
-        public int Defense { get; set; }
-        public int DamageBuff { get; set; }
+        public int Experience { get; private set; }
+        public int Hp { get; private set; }
+        public int AttackSpeed { get; private set; }
+        public int AttackDamage { get; private set; }
+        public int Defense { get; private set; }
+        public int DamageBuff { get; private set; }
         public Action<int> PlayerReceivedExperience;
 
         public PlayerStats(int hp,QuestChannel questChannel,InventoryChannel inventoryChannel, int? attackSpeed = null, int? attackDamage = null, int? defense = null, int? damageBuff = null, int? experience = null)

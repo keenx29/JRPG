@@ -9,7 +9,7 @@ namespace JRPG.Models
     {
         private readonly QuestChannel _questChannel;
         private readonly InventoryChannel _inventoryChannel;
-        public DeliveryQuest(string title, string description, int experience, IItem reward, QuestChannel questChannel,InventoryChannel inventoryChannel, QuestState state = QuestState.Pending) : base(title, description, experience, reward, state, questChannel)
+        public DeliveryQuest(string title, string description, int experience, IItem reward, QuestChannel questChannel,InventoryChannel inventoryChannel, Entity startPoint, Entity endPoint, QuestState state = QuestState.Pending) : base(title, description, experience, reward, state, startPoint, endPoint, questChannel)
         {
             _questChannel = questChannel;
             _inventoryChannel = inventoryChannel;
